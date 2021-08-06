@@ -10,7 +10,7 @@ I18n.translations = {
   pt,
 };
 
-I18n.locale = 'pt';
+I18n.locale = 'en';
 I18n.fallbacks = true;
 
 const Stack = createNativeStackNavigator();

@@ -4,7 +4,7 @@ import I18n from 'i18n-js';
 import styles from './styles';
 
 const HomeScreen = ({navigation}) => {
-  const [lang, setLang] = useState('pt');
+  const [lang, setLang] = useState(I18n.locale);
 
   const switchLang = () => {
     setLang(lang === 'pt' ? 'en' : 'pt');
