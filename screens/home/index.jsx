@@ -1,6 +1,7 @@
 import React, {useState} from 'react';
 import {View, Text, Button} from 'react-native';
 import I18n from 'i18n-js';
+import styles from './styles';
 
 const HomeScreen = ({navigation}) => {
   const [lang, setLang] = useState('pt');
@@ -11,7 +12,7 @@ const HomeScreen = ({navigation}) => {
   };
 
   return (
-    <View style={{flex: 1, alignItems: 'center', justifyContent: 'center'}}>
+    <View style={styles.home}>
       <Text>{I18n.t('home')}</Text>
       <Button
         title={I18n.t('goToDetails')}
