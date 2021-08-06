@@ -14,7 +14,17 @@
   "plugins": ["prettier"],
   "rules": {
     "prettier/prettier": "error",
-    "react/prop-types": ["error", { "ignore": ["navigation"] }]
+    "react/prop-types": ["error", {"ignore": ["navigation"]}],
+    "no-tabs": ["error", {"allowIndentationTabs": true}],
+    "indent": ["error", 2, {"SwitchCase": 1}],
+    "max-len": [
+      "error",
+      {
+        "code": 90,
+        "tabWidth": 4,
+        "ignoreUrls": true
+      }
+    ]
   },
   "settings": {
     "extensions": [".js", ".jsx", ".ts", ".tsx"],
