@@ -1,35 +1,35 @@
-import * as React from "react";
-import { View, Text, Button, useColorScheme } from "react-native";
+import React, { useState } from "react";
+import { View, Text, Button } from "react-native";
 import { NavigationContainer } from "@react-navigation/native";
 import { createNativeStackNavigator } from "@react-navigation/native-stack";
+import I18n from "i18n-js";
+import { en, pt } from "./translations";
+import DetailsScreen from "./screens/details";
+
+I18n.translations = {
+  en,
+  pt,
+};
+
+I18n.locale = "pt";
+I18n.fallbacks = true;
 
 function HomeScreen({ navigation }) {
+  const [lang, setLang] = useState("pt");
+
+  const switchLang = () => {
+    setLang(lang === "pt" ? "en" : "pt");
+    I18n.locale = lang;
+  };
+
   return (
     <View style={{ flex: 1, alignItems: "center", justifyContent: "center" }}>
-      <Text>Home Screen</Text>
+      <Text>{I18n.t("home")}</Text>
       <Button
-        title="Go to Details"
+        title={I18n.t("goToDetails")}
         onPress={() => navigation.navigate("Details")}
       />
-    </View>
-  );
-}
-
-function DetailsScreen() {
-  const colourScheme = useColorScheme();
-  const isDarkMode = colourScheme === "dark";
-  return (
-    <View
-      style={{
-        flex: 1,
-        alignItems: "center",
-        justifyContent: "center",
-        backgroundColor: isDarkMode ? "black" : "white",
-      }}
-    >
-      <Text style={{ color: isDarkMode ? "white" : "black" }}>
-        Details Screen {colourScheme}
-      </Text>
+      <Button title={lang} onPress={switchLang} />
     </View>
   );
 }
