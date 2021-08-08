@@ -3,7 +3,7 @@ import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
 import I18n from 'i18n-js';
 import {en, pt} from './translations';
-import {DetailsScreen, HomeScreen} from './screens';
+import {DetailsScreen, HomeScreen, Login} from './screens';
 
 I18n.translations = {
   en,
@@ -21,6 +21,7 @@ function App() {
       <Stack.Navigator initialRouteName="Home">
         <Stack.Screen name="Home" component={HomeScreen} />
         <Stack.Screen name="Details" component={DetailsScreen} />
+        <Stack.Screen name="Login" component={Login} />
       </Stack.Navigator>
     </NavigationContainer>
   );

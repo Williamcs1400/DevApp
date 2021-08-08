@@ -6,9 +6,11 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
-  textLogged:{
-    textAlign: 'center',
-    fontSize: 45,
-    color: 'gray',
-  }
+  input: {
+    height: 40,
+    width: 350,
+    borderWidth: 1,
+    margin: 10,
+    padding: 10,
+  },
 });
