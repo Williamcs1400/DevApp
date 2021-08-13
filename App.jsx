@@ -1,3 +1,4 @@
+/* eslint-disable camelcase */
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createNativeStackNavigator} from '@react-navigation/native-stack';
@@ -15,6 +16,7 @@ import {
 import meauTheme from './meauTheme';
 import {en, pt} from './translations';
 import {DetailsScreen, HomeScreen} from './screens';
+import {PreferencesContext} from './preferencesContext';
 
 I18n.translations = {
   en,
@@ -35,16 +37,31 @@ function App() {
     Roboto_700Bold,
     Roboto_900Black,
   });
+  const [isThemeDark, setIsThemeDark] = React.useState(false);
+  const toggleTheme = React.useCallback(
+    () => setIsThemeDark(!isThemeDark),
+    [isThemeDark],
+  );
+
+  const preferences = React.useMemo(
+    () => ({
+      toggleTheme,
+      isThemeDark,
+    }),
+    [toggleTheme, isThemeDark],
+  );
 
   return (
-    <PaperProvider theme={meauTheme}>
-      <NavigationContainer>
-        <Stack.Navigator initialRouteName="Home">
-          <Stack.Screen name="Home" component={HomeScreen} />
-          <Stack.Screen name="Details" component={DetailsScreen} />
-        </Stack.Navigator>
-      </NavigationContainer>
-    </PaperProvider>
+    <PreferencesContext.Provider value={preferences}>
+      <PaperProvider theme={meauTheme(isThemeDark)}>
+        <NavigationContainer theme={meauTheme(isThemeDark)}>
+          <Stack.Navigator initialRouteName="Home">
+            <Stack.Screen name="Home" component={HomeScreen} />
+            <Stack.Screen name="Details" component={DetailsScreen} />
+          </Stack.Navigator>
+        </NavigationContainer>
+      </PaperProvider>
+    </PreferencesContext.Provider>
   );
 }
 

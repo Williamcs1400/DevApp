@@ -1,12 +1,14 @@
 import React, {useState} from 'react';
 import {View, Text, Button} from 'react-native';
 import I18n from 'i18n-js';
-import {useTheme, withTheme} from 'react-native-paper';
+import {useTheme, withTheme, TouchableRipple, Switch} from 'react-native-paper';
 import styles from './styles';
+import {PreferencesContext} from '../../preferencesContext';
 
 const HomeScreen = ({navigation}) => {
   const [lang, setLang] = useState(I18n.locale);
   const {colors, fonts} = useTheme();
+  const {toggleTheme, isThemeDark} = React.useContext(PreferencesContext);
 
   const switchLang = () => {
     setLang(lang === 'pt' ? 'en' : 'pt');
@@ -14,14 +16,18 @@ const HomeScreen = ({navigation}) => {
   };
 
   return (
-    <View style={styles.home}>
-      <Text style={fonts.regular}>{I18n.t('home')}</Text>
+    <View style={{...styles.home, backgroundColor: colors.background}}>
+      <Text style={{color: colors.primary}}>{I18n.t('home')}</Text>
 
-      <Text style={fonts.thin}>thin</Text>
-      <Text style={fonts.light}>light</Text>
-      <Text style={fonts.regular}>regular</Text>
-      <Text style={fonts.medium}>medium</Text>
-      <Text style={fonts.bold}>bold</Text>
+      <TouchableRipple>
+        <Switch onValueChange={toggleTheme} color="red" value={isThemeDark} />
+      </TouchableRipple>
+
+      <Text style={{...fonts.thin, color: colors.text}}>thin</Text>
+      <Text style={{...fonts.light, color: colors.text}}>light</Text>
+      <Text style={{...fonts.regular, color: colors.text}}>regular</Text>
+      <Text style={{...fonts.medium, color: colors.text}}>medium</Text>
+      <Text style={{...fonts.bold, color: colors.text}}>bold</Text>
 
       <Button color={colors.primaryOrange} title="primaryOrange" />
       <Button color={colors.secondaryOrange} title="secondaryOrange" />
