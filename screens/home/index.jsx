@@ -26,9 +26,18 @@ const HomeScreen = ({navigation}) => {
     if(user == null){
       setUserIsLogged('Usuário não está logado')
       console.log('User is not logged');
-      navigation.navigate('Login')
+      navigation.navigate('Login');
     }
   });
+
+  function signout(){
+    firebase.auth().signOut().then(() => {
+      console.log('exit');
+      this.forceUpdate();
+    }).catch((error) => {
+      console.log('error: ' + error);
+    });
+  }
 
   return (
     <View style={styles.home}>
@@ -39,10 +48,11 @@ const HomeScreen = ({navigation}) => {
         onPress={() => navigation.navigate('Details')}
       />
       <Button
-        title={'Login'}
+        title={'Cadastrar'}
         onPress={() => navigation.navigate('Login')}
       />
       <Button title={lang} onPress={switchLang} />
+      <Button title={I18n.t('signout')} onPress={signout} />
     </View>
   );
 };

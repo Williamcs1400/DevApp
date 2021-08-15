@@ -4,6 +4,7 @@ export const pt = {
   details: "tela de Detalhes",
   password: "Senha",
   confirm: "Confirmar",
+  signout: "Sair",
 };
 
 export const en = {
@@ -12,4 +13,5 @@ export const en = {
   details: "Details Screen",
   password: "Password",
   confirm: "Confirm",
+  signout: "Signout",
 };

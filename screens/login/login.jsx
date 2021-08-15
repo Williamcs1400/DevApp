@@ -1,21 +1,39 @@
-import React, {useState} from 'react';
-import {View, Text, Button, SafeAreaView, StyleSheet, TextInput} from 'react-native';
+import React, {useState, setState} from 'react';
+import {View, Text, Button, SafeAreaView, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
 import I18n from 'i18n-js';
 import styles from './styles';
-import firebase from 'firebase'
-import * as GoogleSignIn from 'expo-google-sign-in';
+import firebase from 'firebase';
+import Input from 'react-native-input-style';
+global.Buffer = global.Buffer || require('buffer').Buffer
 
 const Login = ({navigation}) => {
   const [email, onChangeEmail] = React.useState(null);
   const [password, onChangepassword] = React.useState(null);
+  const dbUser = firebase.firestore();
 
   function loginEmailAndPassword(){
     if(email != null && password != null){
       firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(() => {
         console.log('User account created & signed in!');
+        const email64 = new Buffer(email).toString('base64')
         navigation.navigate('Home')
-
+        dbUser.collection("users").doc(email64).set({
+          email: email,
+          fullName: "",
+          age: "",
+          state: "",
+          city: "",
+          anddress: "",
+          phone: "",
+          userName: "",
+        })
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
       })
       .catch(error => {
         console.log('ERROR')
@@ -30,39 +48,6 @@ const Login = ({navigation}) => {
       });
     }
   }
-
-  /*function loginGoogle(){
-    state = { user: null };
-
-    
-    initAsync = async () => {
-      await GoogleSignIn.initAsync();
-      this._syncUserWithStateAsync();
-    };
-  
-    _syncUserWithStateAsync = async () => {
-      const user = await GoogleSignIn.signInSilentlyAsync();
-      this.setState({ user });
-    };
-  
-    signOutAsync = async () => {
-      await GoogleSignIn.signOutAsync();
-      this.setState({ user: null });
-    };
-  
-    signInAsync = async () => {
-      try {
-        await GoogleSignIn.askForPlayServicesAsync();
-        const { type, user } = await GoogleSignIn.signInAsync();
-        if (type === 'success') {
-          console.log('SUCESSO GOOGLE')
-          this._syncUserWithStateAsync();
-        }
-      } catch ({ message }) {
-        alert('login: Error:' + message);
-      }
-    };  
-  }*/
   
   return (
     <SafeAreaView style={styles.home}>
@@ -80,14 +65,12 @@ const Login = ({navigation}) => {
         value={password}
         placeholder={I18n.t('password')}
       />
-      <Button 
-        title={
-          I18n.t('confirm')}
-          onPress={() => loginEmailAndPassword()}></Button>
-        {/*<Button 
-          title={I18n.t('confirm') + ' Google'}
-          onPress={() => loginGoogle()}
-        ></Button>*/}
+      <TouchableOpacity 
+        style={styles.confirmButton}
+        onPress={() => loginEmailAndPassword()}
+        >
+        <Text>{I18n.t('confirm')}</Text>
+      </TouchableOpacity>
     </SafeAreaView>
   );
 };
