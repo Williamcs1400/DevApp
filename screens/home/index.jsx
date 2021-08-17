@@ -48,7 +48,7 @@ const HomeScreen = ({navigation}) => {
         onPress={() => navigation.navigate('Details')}
       />
       <Button
-        title={'Cadastrar'}
+        title={I18n.t('register')}
         onPress={() => navigation.navigate('Login')}
       />
       <Button title={lang} onPress={switchLang} />

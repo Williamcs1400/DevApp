@@ -5,6 +5,7 @@ export const pt = {
   password: "Senha",
   confirm: "Confirmar",
   signout: "Sair",
+  register: "Cadastrar",
 };
 
 export const en = {
@@ -14,4 +15,5 @@ export const en = {
   password: "Password",
   confirm: "Confirm",
   signout: "Signout",
+  register: "Register",
 };
