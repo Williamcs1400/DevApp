@@ -30,7 +30,7 @@ const HomeScreen = ({navigation}) => {
     if(user == null){
       setUserIsLogged('Usuário não está logado')
       console.log('User is not logged');
-      navigation.navigate('Login');
+      navigation.navigate('ChangeEntry');
     }
   });
 
