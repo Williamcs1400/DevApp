@@ -5,14 +5,14 @@ import styles from './styles';
 import firebase from 'firebase';
 global.Buffer = global.Buffer || require('buffer').Buffer
 
-const Login = ({navigation}) => {
+const Register = ({navigation}) => {
   const [email, onChangeEmail] = React.useState(null);
   const [password, onChangepassword] = React.useState(null);
   const dbUser = firebase.firestore();
 
   function loginEmailAndPassword(){
     if(email != null && password != null){
-      firebase.auth().signInWithEmailAndPassword(email, password)
+      firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(() => {
         console.log('User account created & signed in!');
         const email64 = new Buffer(email).toString('base64')
@@ -74,4 +74,4 @@ const Login = ({navigation}) => {
   );
 };
 
-export default Login;
+export default Register;
