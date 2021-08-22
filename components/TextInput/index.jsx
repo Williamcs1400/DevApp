@@ -1,18 +1,16 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {View} from 'react-native';
-import {TextInput as TextInputPaper, Text, useTheme} from 'react-native-paper';
+import {TextInput as TextInputPaper, useTheme} from 'react-native-paper';
+import Label from '../Label';
 
 const TextInput = ({label, placeholder, onChange, value, error}) => {
-  const {colors, fonts} = useTheme();
+  const {colors} = useTheme();
 
   return (
     <View style={{padding: 16}}>
-      {label && (
-        <Text style={{...fonts.regular, color: colors.primaryTeal, marginBottom: 8}}>
-          {String(label).toUpperCase()}
-        </Text>
-      )}
+      {label && <Label name={label} />}
+
       <TextInputPaper
         placeholder={placeholder}
         value={value}

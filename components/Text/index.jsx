@@ -34,7 +34,7 @@ Text.propTypes = {
 
 Text.defaultProps = {
   color: '',
-  fontSize: 16,
+  fontSize: 14,
   fontWeight: 'regular',
   style: {},
 };
