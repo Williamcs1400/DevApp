@@ -3,7 +3,6 @@ import {View, Text, Button, SafeAreaView, StyleSheet, TextInput, TouchableOpacit
 import I18n from 'i18n-js';
 import styles from './styles';
 import firebase from 'firebase';
-import Input from 'react-native-input-style';
 global.Buffer = global.Buffer || require('buffer').Buffer
 
 const Login = ({navigation}) => {
