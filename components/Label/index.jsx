@@ -1,7 +1,7 @@
 import React from 'react';
 import PropTypes from 'prop-types';
 import {useTheme} from 'react-native-paper';
-import {Text} from '../index';
+import Text from '../Text';
 
 const Label = ({name}) => {
   const {colors} = useTheme();

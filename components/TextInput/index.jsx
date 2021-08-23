@@ -9,7 +9,7 @@ const TextInput = ({label, placeholder, onChange, value, error}) => {
 
   return (
     <View style={{padding: 16}}>
-      {label && <Label name={label} />}
+      {label.length > 0 && <Label name={label} />}
 
       <TextInputPaper
         placeholder={placeholder}

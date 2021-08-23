@@ -10,6 +10,7 @@ import {
 import customFonts from './fonts';
 
 const customThemeColors = {
+  primary: '#589b9b',
   primaryOrange: '#F7a800',
   secondaryOrange: '#ffd358',
   terciaryOrange: '#fee29b',
@@ -23,6 +24,7 @@ const customThemeColors = {
 };
 
 const customThemeDarkColors = {
+  primary: '#589b9b',
   primaryOrange: '#F7a800',
   secondaryOrange: '#ffd358',
   terciaryOrange: '#fee29b',
