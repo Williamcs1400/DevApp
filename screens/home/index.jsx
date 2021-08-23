@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
-import {View, Text, Button} from 'react-native';
+import {View, Button} from 'react-native';
 import I18n from 'i18n-js';
-import {useTheme, withTheme, TouchableRipple, Switch} from 'react-native-paper';
+import {useTheme, withTheme, TouchableRipple, Switch, Text} from 'react-native-paper';
 import styles from './styles';
 import {PreferencesContext} from '../../preferencesContext';
 import firebase from 'firebase';
@@ -74,6 +74,12 @@ const HomeScreen = ({navigation}) => {
       />
       <Button title={lang} onPress={switchLang} />
       <Button title={I18n.t('signout')} onPress={signout} />
+      <Button
+        color={colors.primaryOrange}
+        title="cadastro de bichos"
+        onPress={() => navigation.navigate('RegisterAnimalScreen')}
+      />
+      <Button color={colors.primaryTeal} title={lang} onPress={switchLang} />
     </View>
   );
 };
