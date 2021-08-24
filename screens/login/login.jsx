@@ -1,8 +1,9 @@
 import React, {useState, setState} from 'react';
-import {View, Text, Button, SafeAreaView, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import {View, Text, Button, SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native';
 import I18n from 'i18n-js';
 import styles from './styles';
 import firebase from 'firebase';
+import {TextInput} from '../../components';
 global.Buffer = global.Buffer || require('buffer').Buffer
 
 const Login = ({navigation}) => {
@@ -54,14 +55,16 @@ const Login = ({navigation}) => {
         style={styles.input}
         onChangeText={onChangeEmail}
         value={email}
+        label="Email"
         placeholder="Email"
         keyboardType={'email-address'}
       />
       <TextInput
         style={styles.input}
-        secureTextEntry={true}
         onChangeText={onChangepassword}
         value={password}
+        label={I18n.t('password')}
+        secureTextEntry={true}
         placeholder={I18n.t('password')}
       />
       <TouchableOpacity 

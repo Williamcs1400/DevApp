@@ -1,8 +1,9 @@
 import React, {useState, setState} from 'react';
-import {View, Text, Button, SafeAreaView, StyleSheet, TextInput, TouchableOpacity} from 'react-native';
+import {View, Text, Button, SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native';
 import I18n from 'i18n-js';
 import styles from './styles';
 import firebase from 'firebase';
+import {TextInput} from '../../components';
 global.Buffer = global.Buffer || require('buffer').Buffer
 
 const Register = ({navigation}) => {
@@ -55,6 +56,7 @@ const Register = ({navigation}) => {
         onChangeText={onChangeEmail}
         value={email}
         placeholder="Email"
+        label="Email"
         keyboardType={'email-address'}
       />
       <TextInput
@@ -63,6 +65,7 @@ const Register = ({navigation}) => {
         onChangeText={onChangepassword}
         value={password}
         placeholder={I18n.t('password')}
+        label={I18n.t('password')}
       />
       <TouchableOpacity 
         style={styles.confirmButton}
