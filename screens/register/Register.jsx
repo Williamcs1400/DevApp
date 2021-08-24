@@ -46,6 +46,8 @@ const Register = ({navigation}) => {
       }
         console.error(error);
       });
+    }else{
+      console.log('Email ou senha vazios')
     }
   }
   
@@ -53,7 +55,7 @@ const Register = ({navigation}) => {
     <SafeAreaView style={styles.home}>
       <TextInput
         style={styles.input}
-        onChangeText={onChangeEmail}
+        onChange={(t) => onChangeEmail(t)}
         value={email}
         placeholder="Email"
         label="Email"
@@ -62,7 +64,7 @@ const Register = ({navigation}) => {
       <TextInput
         style={styles.input}
         secureTextEntry={true}
-        onChangeText={onChangepassword}
+        onChange={(t) => onChangepassword(t)}
         value={password}
         placeholder={I18n.t('password')}
         label={I18n.t('password')}

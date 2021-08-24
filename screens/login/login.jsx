@@ -46,6 +46,8 @@ const Login = ({navigation}) => {
       }
         console.error(error);
       });
+    }else{
+      console.log('Email ou senha vazios')
     }
   }
   
@@ -53,7 +55,7 @@ const Login = ({navigation}) => {
     <SafeAreaView style={styles.home}>
       <TextInput
         style={styles.input}
-        onChangeText={onChangeEmail}
+        onChange={(t) => onChangeEmail(t)}
         value={email}
         label="Email"
         placeholder="Email"
@@ -61,7 +63,7 @@ const Login = ({navigation}) => {
       />
       <TextInput
         style={styles.input}
-        onChangeText={onChangepassword}
+        onChange={(t) => onChangepassword(t)}
         value={password}
         label={I18n.t('password')}
         secureTextEntry={true}
