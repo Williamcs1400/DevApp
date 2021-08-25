@@ -6,16 +6,34 @@ import firebase from 'firebase';
 import {TextInput} from '../../components';
 global.Buffer = global.Buffer || require('buffer').Buffer
 
-const Login = ({navigation}) => {
+const Register = ({navigation}) => {
   const [email, onChangeEmail] = React.useState(null);
   const [password, onChangepassword] = React.useState(null);
   const dbUser = firebase.firestore();
 
   function loginEmailAndPassword(){
     if(email != null && password != null){
-      firebase.auth().signInWithEmailAndPassword(email, password)
+      firebase.auth().createUserWithEmailAndPassword(email, password)
       .then(() => {
         console.log('User account created & signed in!');
+        const email64 = new Buffer(email).toString('base64')
+        navigation.navigate('Home')
+        dbUser.collection("users").doc(email64).set({
+          email: email,
+          fullName: "",
+          age: "",
+          state: "",
+          city: "",
+          anddress: "",
+          phone: "",
+          userName: "",
+        })
+        .then((docRef) => {
+            console.log("Document written with ID: ", docRef.id);
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
       })
       .catch(error => {
         console.log('ERROR')
@@ -28,7 +46,6 @@ const Login = ({navigation}) => {
       }
         console.error(error);
       });
-
     }else{
       console.log('Email ou senha vazios')
     }
@@ -40,17 +57,17 @@ const Login = ({navigation}) => {
         style={styles.input}
         onChange={(t) => onChangeEmail(t)}
         value={email}
-        label="Email"
         placeholder="Email"
+        label="Email"
         keyboardType={'email-address'}
       />
       <TextInput
         style={styles.input}
+        secureTextEntry={true}
         onChange={(t) => onChangepassword(t)}
         value={password}
-        label={I18n.t('password')}
-        secureTextEntry={true}
         placeholder={I18n.t('password')}
+        label={I18n.t('password')}
       />
       <TouchableOpacity 
         style={styles.confirmButton}
@@ -62,4 +79,4 @@ const Login = ({navigation}) => {
   );
 };
 
-export default Login;
+export default Register;

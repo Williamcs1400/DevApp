@@ -6,4 +6,9 @@ export default StyleSheet.create({
     alignItems: 'center',
     justifyContent: 'center',
   },
+  textLogged:{
+    textAlign: 'center',
+    fontSize: 45,
+    color: 'gray',
+  }
 });

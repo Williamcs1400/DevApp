@@ -15,7 +15,7 @@ import {
 } from '@expo-google-fonts/roboto';
 import meauTheme from './meauTheme';
 import {en, pt} from './translations';
-import {DetailsScreen, HomeScreen} from './screens';
+import {DetailsScreen, HomeScreen, Register, Login, ChangeEntry, RegisterAnimalScreen} from './screens';
 import {PreferencesContext} from './preferencesContext';
 
 I18n.translations = {
@@ -58,6 +58,10 @@ function App() {
           <Stack.Navigator initialRouteName="Home">
             <Stack.Screen name="Home" component={HomeScreen} />
             <Stack.Screen name="Details" component={DetailsScreen} />
+            <Stack.Screen name="Login" component={Login} />
+            <Stack.Screen name="Register" component={Register} />
+            <Stack.Screen name="ChangeEntry" component={ChangeEntry} />
+            <Stack.Screen name="RegisterAnimalScreen" component={RegisterAnimalScreen} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
