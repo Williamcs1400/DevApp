@@ -28,6 +28,7 @@ const Login = ({navigation}) => {
       }
         console.error(error);
       });
+
     }else{
       console.log('Email ou senha vazios')
     }
