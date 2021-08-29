@@ -21,6 +21,7 @@ export const pt = {
   passwordConfirm: "Confirmação de senha",
   profilePicture: "Foto de perfil",
   confirmSignUp: "Fazer cadastro",
+  addPicture: "adicionar foto",
 };
 
 export const en = {
@@ -46,4 +47,5 @@ export const en = {
   passwordConfirm: "Password confirmation",
   profilePicture: "Profile picture",
   confirmSignUp: "Sign up",
+  addPicture: "add picture",
 };

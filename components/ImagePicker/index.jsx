@@ -6,6 +6,7 @@ import {Card, useTheme} from 'react-native-paper';
 import {Ionicons} from '@expo/vector-icons';
 import Text from '../Text';
 import Label from '../Label';
+import I18n from 'i18n-js';
 
 const ImagePicker = ({label}) => {
   const {colors} = useTheme();
@@ -27,7 +28,7 @@ const ImagePicker = ({label}) => {
         <Card.Content style={{justifyContent: 'center', alignItems: 'center', flex: 1}}>
           <Ionicons name="add-circle-outline" size={32} color={colors.iconColor} />
           <Text color={colors.iconColor} fontSize={20}>
-            adicionar fotos
+            {I18n.t('addPicture')}
           </Text>
         </Card.Content>
       </Card>
