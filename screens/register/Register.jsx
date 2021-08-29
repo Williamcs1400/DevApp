@@ -1,81 +1,143 @@
-import React, {useState, setState} from 'react';
-import {View, Text, Button, SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native';
+import React, {useState} from 'react';
+import {ScrollView, View} from 'react-native';
 import I18n from 'i18n-js';
-import styles from './styles';
-import firebase from 'firebase';
-import {TextInput} from '../../components';
-global.Buffer = global.Buffer || require('buffer').Buffer
+import {useTheme, Button, Card, Paragraph} from 'react-native-paper';
+import {TextInput, Text, ImagePicker} from '../../components';
+
+const styles = {
+  inputGroupView: {
+    flexDirection: 'row',
+    alignItems: 'center',
+    minWidth: '33%',
+  },
+  inputGroupFlex: {
+    flexDirection: 'row',
+    flexWrap: 'wrap',
+  },
+};
 
 const Register = ({navigation}) => {
-  const [email, onChangeEmail] = React.useState(null);
-  const [password, onChangepassword] = React.useState(null);
-  const dbUser = firebase.firestore();
+  const [fullName, setFullName] = useState('');
+  const [age, setAge] = useState('');
+  const [email, setEmail] = useState('');
+  const [province, setProvince] = useState('');
+  const [city, setCity] = useState('');
+  const [address, setAddress] = useState('');
+  const [phone, setPhone] = useState('');
+  const [username, setUsername] = useState('');
+  const [password, setPassword] = useState('');
+  const [passwordConfirm, setPasswordConfirm] = useState('');
 
-  function loginEmailAndPassword(){
-    if(email != null && password != null){
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('User account created & signed in!');
-        const email64 = new Buffer(email).toString('base64')
-        navigation.navigate('Home')
-        dbUser.collection("users").doc(email64).set({
-          email: email,
-          fullName: "",
-          age: "",
-          state: "",
-          city: "",
-          anddress: "",
-          phone: "",
-          userName: "",
-        })
-        .then((docRef) => {
-            console.log("Document written with ID: ", docRef.id);
-        })
-        .catch((error) => {
-            console.error("Error adding document: ", error);
-        });
-      })
-      .catch(error => {
-        console.log('ERROR')
-      if (error.code === 'auth/email-already-in-use') {
-        console.log('That email address is already in use!');
-      }
-  
-      if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!');
-      }
-        console.error(error);
-      });
-    }else{
-      console.log('Email ou senha vazios')
-    }
+  const {colors} = useTheme();
+
+  const SectionHeader = ({text}) => {
+    const {colors} = useTheme();
+
+    return (
+      <View>
+        <Text>{text}</Text>
+      </View>
+
+    );
+  }
+
+  const InfoCard = ({text}) => {
+    const {colors} = useTheme();
+
+    return (
+      <View>
+        <Card>
+          <Card.Content>
+            <Paragraph>{text}</Paragraph>
+          </Card.Content>
+        </Card>
+      </View>
+    );
   }
   
   return (
-    <SafeAreaView style={styles.home}>
+    <ScrollView>
+      <View>
+        <InfoCard text={I18n.t('signUpDisclaimer')} />
+      </View>
+
+      <SectionHeader text={I18n.t('personalInfo')} />
       <TextInput
-        style={styles.input}
-        onChange={(t) => onChangeEmail(t)}
+        label="full name"
+        value={fullName}
+        onChange={(t) => setFullName(t)}
+        placeholder={I18n.t('fullName')}
+      />
+      <TextInput
+        label="age"
+        value={age}
+        onChange={(t) => setAge(t)}
+        placeholder={I18n.t('age')}
+      />
+      <TextInput
+        label="email"
         value={email}
-        placeholder="Email"
-        label="Email"
-        keyboardType={'email-address'}
+        onChange={(t) => setEmail(t)}
+        placeholder={I18n.t('email')}
       />
       <TextInput
-        style={styles.input}
-        secureTextEntry={true}
-        onChange={(t) => onChangepassword(t)}
-        value={password}
-        placeholder={I18n.t('password')}
-        label={I18n.t('password')}
+        label="province"
+        value={province}
+        onChange={(t) => setProvince(t)}
+        placeholder={I18n.t('province')}
       />
-      <TouchableOpacity 
-        style={styles.confirmButton}
-        onPress={() => loginEmailAndPassword()}
-        >
-        <Text>{I18n.t('confirm')}</Text>
-      </TouchableOpacity>
-    </SafeAreaView>
+      <TextInput
+        label="city"
+        value={city}
+        onChange={(t) => setCity(t)}
+        placeholder={I18n.t('city')}
+      />
+      <TextInput
+        label="address"
+        value={address}
+        onChange={(t) => setAddress(t)}
+        placeholder={I18n.t('address')}
+      />
+      <TextInput
+        label="phone"
+        value={phone}
+        onChange={(t) => setPhone(t)}
+        placeholder={I18n.t('phone')}
+      />
+
+      <SectionHeader text={I18n.t('profileInfo')} />
+      <TextInput
+        label="username"
+        value={username}
+        onChange={(t) => setUsername(t)}
+        placeholder={I18n.t('username')}
+      />
+      <TextInput
+        label="password"
+        value={password}
+        onChange={(t) => setPassword(t)}
+        placeholder={I18n.t('fullName')}
+        secureTextEntry={true}
+      />
+      <TextInput
+        label="password confirm"
+        value={passwordConfirm}
+        onChange={(t) => setPasswordConfirm(t)}
+        placeholder={I18n.t('passwordConfirm')}
+        secureTextEntry={true}
+      />
+
+      <SectionHeader text={I18n.t('profilePicture')} />
+      <ImagePicker label="profile picture" />
+
+      <Button
+        mode="contained"
+        theme={{roundness: 0}}
+        style={{width: '60%', alignSelf: 'center'}}
+      >
+        {I18n.t('confirmSignUp')}
+      </Button>
+    </ScrollView>
   );
 };
 
