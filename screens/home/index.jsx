@@ -73,7 +73,7 @@ const HomeScreen = ({navigation}) => {
         onPress={() => navigation.navigate('Login')}
       />
       <Button title={lang} onPress={switchLang} />
-      <Button title={I18n.t('signout')} onPress={signout} />
+      <Button title={I18n.t('signOut')} onPress={signout} />
       <Button
         color={colors.primaryOrange}
         title="cadastro de bichos"

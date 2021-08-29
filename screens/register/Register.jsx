@@ -117,14 +117,14 @@ const Register = ({navigation}) => {
         value={password}
         onChange={(t) => setPassword(t)}
         placeholder={I18n.t('fullName')}
-        secureTextEntry={true}
+        isSecure={true}
       />
       <TextInput
         label="password confirm"
         value={passwordConfirm}
         onChange={(t) => setPasswordConfirm(t)}
         placeholder={I18n.t('passwordConfirm')}
-        secureTextEntry={true}
+        isSecure={true}
       />
 
       <SectionHeader text={I18n.t('profilePicture')} />

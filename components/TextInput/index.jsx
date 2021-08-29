@@ -4,7 +4,7 @@ import {View} from 'react-native';
 import {TextInput as TextInputPaper, useTheme} from 'react-native-paper';
 import Label from '../Label';
 
-const TextInput = ({label, placeholder, onChange, value, error}) => {
+const TextInput = ({label, placeholder, onChange, value, error, isSecure = false}) => {
   const {colors} = useTheme();
 
   return (
@@ -26,6 +26,7 @@ const TextInput = ({label, placeholder, onChange, value, error}) => {
           },
           roundness: 0,
         }}
+        secureTextEntry={isSecure}
       />
     </View>
   );
