@@ -2,6 +2,7 @@ import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import {Checkbox, RadioButton, useTheme, Button} from 'react-native-paper';
 import {TextInput, Text, ImagePicker, Label} from '../../components';
+import firebase from 'firebase';
 
 const styles = {
   inputGroupView: {
@@ -78,8 +79,37 @@ const RegisterAnimalScreen = ({navigation}) => {
   const [neutered, setNeutered] = useState(false);
   const [sick, setSick] = useState(false);
   const [sicknesses, setSicknesses] = useState('');
+  const dbUser = firebase.firestore();
 
   const {colors} = useTheme();
+
+  function saveFirebase(){
+    console.log('AAAAAAAAAAAAAAAAAAAAAA');
+    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64')
+    dbUser.collection("animal").doc(email64).set({
+      name,
+      species,
+      sex,
+      size,
+      age,
+      playful,
+      shy,
+      calm,
+      guard,
+      lovely,
+      lazy,
+      vaccinated,
+      vermifugatedm,
+      neutered,
+      sick,
+      sicknesses
+    }).then((docRef) => {
+      console.log("Document written with ID: ", docRef.id);
+    })
+    .catch((error) => {
+        console.error("Error adding document: ", error);
+    });
+  }
 
   return (
     <ScrollView>
@@ -212,6 +242,7 @@ const RegisterAnimalScreen = ({navigation}) => {
           mode="contained"
           theme={{roundness: 0}}
           style={{width: '60%', alignSelf: 'center'}}
+          onPress={() => saveFirebase()}
         >
           PROCURAR AJUDA
         </Button>
