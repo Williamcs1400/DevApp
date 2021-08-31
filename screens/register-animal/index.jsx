@@ -97,7 +97,7 @@ const RegisterAnimalScreen = ({navigation}) => {
       history: '',
     },
   });
-  const onSubmit = (data) => Alert.alert(JSON.stringify(data));
+  const onSubmit = (data) => navigation.navigate('AnimalProfileScreen', {animal: data});
 
   useEffect(() => {
     register('name');
@@ -126,7 +126,6 @@ const RegisterAnimalScreen = ({navigation}) => {
           onValueChange={(newValue) => setValue('species', newValue)}
           value={watch('species')}
         />
-        <Text>{getValues('species')}</Text>
         <RadioInputs
           label="sexo"
           options={[
