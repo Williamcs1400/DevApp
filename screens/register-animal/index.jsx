@@ -1,5 +1,6 @@
-import React, {useState} from 'react';
-import {ScrollView, View} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {ScrollView, View, Alert} from 'react-native';
+import {useForm} from 'react-hook-form';
 import {Checkbox, RadioButton, useTheme, Button} from 'react-native-paper';
 import {TextInput, Text, ImagePicker, Label} from '../../components';
 import firebase from 'firebase';
@@ -82,6 +83,47 @@ const RegisterAnimalScreen = ({navigation}) => {
   const dbUser = firebase.firestore();
 
   const {colors} = useTheme();
+  const {register, setValue, getValues, watch, handleSubmit} = useForm({
+    defaultValues: {
+      name: '',
+      photo: null,
+      species: '',
+      sex: '',
+      size: '',
+      age: '',
+      personality: {
+        playful: false,
+        shy: false,
+        calm: false,
+        guard: false,
+        lovely: false,
+        lazy: false,
+      },
+      health: {
+        vaccinated: false,
+        vermifugated: false,
+        neutered: false,
+        isSick: false,
+        diseases: '',
+      },
+      needs: {
+        food: false,
+        financialAid: false,
+        needsMedications: false,
+        medications: '',
+        needsObjects: false,
+        objects: '',
+      },
+      history: '',
+    },
+  });
+  const onSubmit = (data) => navigation.navigate('AnimalProfileScreen', {animal: data});
+
+  useEffect(() => {
+    register('name');
+    register('photo');
+    register('species');
+  }, [register]);
 
   function saveFirebase(){
     console.log('AAAAAAAAAAAAAAAAAAAAAA');
@@ -116,19 +158,21 @@ const RegisterAnimalScreen = ({navigation}) => {
       <View>
         <TextInput
           label="nome do animal"
-          value={name}
-          onChange={(t) => setName(t)}
           placeholder="Nome do animal"
+          onChange={(text) => setValue('name', text)}
         />
-        <ImagePicker label="fotos do animal" />
+        <ImagePicker
+          label="fotos do animal"
+          imageCallback={(photo) => setValue('photo', photo)}
+        />
         <RadioInputs
           label="Espécie"
           options={[
             {name: 'Cachorro', value: 'dog'},
             {name: 'Gato', value: 'cat'},
           ]}
-          onValueChange={setSpecies}
-          value={species}
+          onValueChange={(newValue) => setValue('species', newValue)}
+          value={watch('species')}
         />
         <RadioInputs
           label="sexo"
@@ -136,8 +180,8 @@ const RegisterAnimalScreen = ({navigation}) => {
             {name: 'Macho', value: 'male'},
             {name: 'Female', value: 'female'},
           ]}
-          onValueChange={setSex}
-          value={sex}
+          onValueChange={(newValue) => setValue('sex', newValue)}
+          value={watch('sex')}
         />
         <RadioInputs
           label="porte"
@@ -146,8 +190,8 @@ const RegisterAnimalScreen = ({navigation}) => {
             {name: 'Médio', value: 'medium'},
             {name: 'Grande', value: 'large'},
           ]}
-          onValueChange={setSize}
-          value={size}
+          onValueChange={(newValue) => setValue('size', newValue)}
+          value={watch('size')}
         />
         <RadioInputs
           label="idade"
@@ -156,22 +200,45 @@ const RegisterAnimalScreen = ({navigation}) => {
             {name: 'Adulto', value: 'adult'},
             {name: 'Idoso', value: 'senior'},
           ]}
-          onValueChange={setAge}
-          value={age}
+          onValueChange={(newValue) => setValue('age', newValue)}
+          value={watch('age')}
         />
         <CheckboxInputs
           label="Temperamento"
           options={[
             {
               name: 'Brincalhão',
-              checked: playful,
-              setChecked: () => setPlayful(!playful),
+              checked: watch('personality.playful'),
+              setChecked: () =>
+                setValue('personality.playful', !watch('personality.playful')),
             },
-            {name: 'Tímido', checked: shy, setChecked: () => setShy(!shy)},
-            {name: 'Calmo', checked: calm, setChecked: () => setCalm(!calm)},
-            {name: 'Guarda', checked: guard, setChecked: () => setGuard(!guard)},
-            {name: 'Amoroso', checked: lovely, setChecked: () => setLovely(!lovely)},
-            {name: 'Preguiçoso', checked: lazy, setChecked: () => setLazy(!lazy)},
+            {
+              name: 'Tímido',
+              checked: watch('personality.shy'),
+              setChecked: () => setValue('personality.shy', !watch('personality.shy')),
+            },
+            {
+              name: 'Calmo',
+              checked: watch('personality.calm'),
+              setChecked: () => setValue('personality.calm', !watch('personality.calm')),
+            },
+            {
+              name: 'Guarda',
+              checked: watch('personality.guard'),
+              setChecked: () =>
+                setValue('personality.guard', !watch('personality.guard')),
+            },
+            {
+              name: 'Amoroso',
+              checked: watch('personality.lovely'),
+              setChecked: () =>
+                setValue('personality.lovely', !watch('personality.lovely')),
+            },
+            {
+              name: 'Preguiçoso',
+              checked: watch('personality.lazy'),
+              setChecked: () => setValue('personality.lazy', !watch('personality.lazy')),
+            },
           ]}
         />
         <CheckboxInputs
@@ -179,63 +246,83 @@ const RegisterAnimalScreen = ({navigation}) => {
           options={[
             {
               name: 'Vacinado',
-              checked: vaccinated,
-              setChecked: () => setVaccinated(!vaccinated),
+              checked: watch('health.vaccinated'),
+              setChecked: () =>
+                setValue('health.vaccinated', !watch('health.vaccinated')),
             },
             {
               name: 'Vermifugado',
-              checked: vermifugated,
-              setChecked: () => setVermifugated(!vermifugated),
+              checked: watch('health.vermifugated'),
+              setChecked: () =>
+                setValue('health.vermifugated', !watch('health.vermifugated')),
             },
             {
               name: 'Castrado',
-              checked: neutered,
-              setChecked: () => setNeutered(!neutered),
+              checked: watch('health.neutered'),
+              setChecked: () => setValue('health.neutered', !watch('health.neutered')),
             },
-            {name: 'Doente', checked: sick, setChecked: () => setSick(!sick)},
+            {
+              name: 'Doente',
+              checked: watch('health.sick'),
+              setChecked: () => setValue('health.sick', !watch('health.sick')),
+            },
           ]}
         />
         <TextInput
           placeholder="Doenças do animal"
-          value={sicknesses}
-          onChange={(t) => setSicknesses(t)}
+          onChange={(t) => setValue('health.diseases', t)}
         />
 
         <View style={{padding: 16}}>
           <Label name="necessidades do animal" />
           <View style={styles.inputGroupView}>
-            <Checkbox status="checked" color={colors.primaryTeal} />
+            <Checkbox
+              status={watch('needs.food') ? 'checked' : 'unchecked'}
+              onPress={() => setValue('needs.food', !watch('needs.food'))}
+              color={colors.primaryTeal}
+            />
             <Text>Alimento</Text>
           </View>
           <View style={styles.inputGroupView}>
-            <Checkbox status="checked" color={colors.primaryTeal} />
+            <Checkbox
+              status={watch('needs.financialAid') ? 'checked' : 'unchecked'}
+              onPress={() => setValue('needs.financialAid', !watch('needs.financialAid'))}
+              color={colors.primaryTeal}
+            />
             <Text>Auxílio financeiro</Text>
           </View>
           <View style={styles.inputGroupView}>
-            <Checkbox status="checked" color={colors.primaryTeal} />
+            <Checkbox
+              status={watch('needs.needsMedications') ? 'checked' : 'unchecked'}
+              onPress={() =>
+                setValue('needs.needsMedications', !watch('needs.needsMedications'))
+              }
+              color={colors.primaryTeal}
+            />
             <Text>Medicamentos</Text>
           </View>
           <TextInput
             placeholder="Nome do medicamento"
-            value={sicknesses}
-            onChange={(t) => setSicknesses(t)}
+            onChange={(t) => setValue('needs.medications', t)}
           />
           <View style={styles.inputGroupView}>
-            <Checkbox status="checked" color={colors.primaryTeal} />
+            <Checkbox
+              status={watch('needs.needsObjects') ? 'checked' : 'unchecked'}
+              onPress={() => setValue('needs.needsObjects', !watch('needs.needsObjects'))}
+              color={colors.primaryTeal}
+            />
             <Text>Objetos</Text>
           </View>
           <TextInput
             placeholder="Especifique o(s) objeto(s)"
-            value={sicknesses}
-            onChange={(t) => setSicknesses(t)}
+            onChange={(t) => setValue('objects', t)}
           />
         </View>
 
         <TextInput
           placeholder="Compartilhe a história do animal"
           label="sobre o animal"
-          value={sicknesses}
-          onChange={(t) => setSicknesses(t)}
+          onChange={(t) => setValue('history', t)}
         />
 
         <Button
