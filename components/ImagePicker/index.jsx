@@ -9,7 +9,7 @@ import I18n from 'i18n-js';
 import Text from '../Text';
 import Label from '../Label';
 
-const ImagePicker = ({label}) => {
+const ImagePicker = ({label, imageCallback}) => {
   const {colors} = useTheme();
   const [image, setImage] = useState(null);
 
@@ -36,6 +36,9 @@ const ImagePicker = ({label}) => {
 
     if (!result.cancelled) {
       setImage(result.uri);
+      if (imageCallback) {
+        imageCallback(result.uri);
+      }
     }
   };
 
