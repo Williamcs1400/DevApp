@@ -126,31 +126,16 @@ const RegisterAnimalScreen = ({navigation}) => {
   }, [register]);
 
   function saveFirebase(){
-    console.log('AAAAAAAAAAAAAAAAAAAAAA');
-    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64')
+    // TODO: arrumar isso aqui
+    /*const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64')
     dbUser.collection("animal").doc(email64).set({
-      name,
-      species,
-      sex,
-      size,
-      age,
-      playful,
-      shy,
-      calm,
-      guard,
-      lovely,
-      lazy,
-      vaccinated,
-      vermifugatedm,
-      neutered,
-      sick,
-      sicknesses
     }).then((docRef) => {
       console.log("Document written with ID: ", docRef.id);
     })
     .catch((error) => {
         console.error("Error adding document: ", error);
-    });
+    });*/
+    navigation.navigate('Home');
   }
 
   return (
