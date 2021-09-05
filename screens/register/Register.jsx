@@ -58,18 +58,24 @@ const Register = ({navigation}) => {
     );
   }
 
-  const blob = await new Promise((resolve, reject) => {
-    const xhr = new XMLHttpRequest();
-    xhr.onload = function () {
-      resolve(xhr.response);
-    };
-    xhr.onerror = function () {
-      reject(new TypeError("Network request failed"));
-    };
-    xhr.responseType = "blob";
-    xhr.open("GET", pickerResult.uri, true);
-    xhr.send(null);
-  });
+  async function uploadImageAsync(uri) {
+    
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function(e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
+  
+    return blob;
+  }
 
   async function loginEmailAndPassword(){
     if(email != null && password != null){
@@ -87,27 +93,34 @@ const Register = ({navigation}) => {
           anddress: address,
           phone: phone,
           userName: username,
+          photoURL: ""
         })
         .then((docRef) => {
-            console.log("Document written with ID: ", docRef);
             console.log("photo: " + photo)
-            // TODO: arrumar o esquema do blob
+            uploadImageAsync(photo).then(blob =>{
 
-            // if(photo != null){
-            //   const photo64 = new Buffer(photo).toString('base64')
-            //   storage
-            //   .child('images')
-            //   .child('users')
-            //   .child(email64)
-            //   .child('profilePicture')
-            //   .put(blob, { contentType: "image/png" }).then(function(snapshot) {
-            //     console.log('Uploaded a base64 string!');
-            //   });
-            // }
-        })
-        .catch((error) => {
-            console.error("Error adding document: ", error);
+            if(blob != null){
+              storage
+              .child('images')
+              .child('users')
+              .child(email64)
+              .child('profilePicture')
+              .put(blob).then(function(snapshot){
+                console.log('Uploaded a blob or file!');
+
+                snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                  dbUser.collection("users").doc(email64).update({
+                    photoURL: downloadURL,
+                  })
+                  console.log('File available at', downloadURL);
+                });
+              });
+            }
         });
+      })
+      .catch((error) => {
+          console.error("Error adding document: ", error);
+      });
       })
       .catch(error => {
         console.log('ERROR')

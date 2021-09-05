@@ -32,8 +32,6 @@ const ImagePicker = ({label, imageCallback}) => {
       quality: 1,
     });
 
-    console.log("image: " + result);
-
     if (!result.cancelled) {
       setImage(result.uri);
       if (imageCallback) {
