@@ -68,10 +68,6 @@ const HomeScreen = ({navigation}) => {
         title={I18n.t('goToDetails')}
         onPress={() => navigation.navigate('Details')}
       /> */}
-      <Button
-        title={I18n.t('register')}
-        onPress={() => navigation.navigate('Login')}
-      />
       <Button title={lang} onPress={switchLang} />
       <Button title={I18n.t('signOut')} onPress={signout} />
       <Button

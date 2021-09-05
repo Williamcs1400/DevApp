@@ -96,32 +96,35 @@ const Register = ({navigation}) => {
           photoURL: ""
         })
         .then((docRef) => {
-            console.log("photo: " + photo)
+          console.log("photo: " + photo)
+
+          if(photo != null){
             uploadImageAsync(photo).then(blob =>{
 
-            if(blob != null){
-              storage
-              .child('images')
-              .child('users')
-              .child(email64)
-              .child('profilePicture')
-              .put(blob).then(function(snapshot){
-                console.log('Uploaded a blob or file!');
-
-                snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                  dbUser.collection("users").doc(email64).update({
-                    photoURL: downloadURL,
-                  })
-                  console.log('File available at', downloadURL);
+              if(blob != null){
+                storage
+                .child('images')
+                .child('users')
+                .child(email64)
+                .child('profilePicture')
+                .put(blob).then(function(snapshot){
+                  console.log('Uploaded a blob or file!');
+  
+                  snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    dbUser.collection("users").doc(email64).update({
+                      photoURL: downloadURL,
+                    })
+                    console.log('File available at', downloadURL);
+                  });
                 });
-              });
-            }
+              }
+            });
+          }
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
         });
-      })
-      .catch((error) => {
-          console.error("Error adding document: ", error);
-      });
-      })
+        })
       .catch(error => {
         console.log('ERROR')
       if (error.code === 'auth/email-already-in-use') {

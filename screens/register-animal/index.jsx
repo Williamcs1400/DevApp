@@ -80,7 +80,9 @@ const RegisterAnimalScreen = ({navigation}) => {
   const [neutered, setNeutered] = useState(false);
   const [sick, setSick] = useState(false);
   const [sicknesses, setSicknesses] = useState('');
-  const dbUser = firebase.firestore();
+  const [photoUrl, setPhotoUrl] = useState(null);
+  const dbAnimal = firebase.firestore();
+  const storage = firebase.storage().ref();
 
   const {colors} = useTheme();
   const {register, setValue, getValues, watch, handleSubmit} = useForm({
@@ -115,26 +117,74 @@ const RegisterAnimalScreen = ({navigation}) => {
         objects: '',
       },
       history: '',
+      creatorUser: '',
+      adoptedUser: '',
     },
   });
+
   const onSubmit = (data) => navigation.navigate('AnimalProfileScreen', {animal: data});
 
   useEffect(() => {
     register('name');
-    register('photo');
     register('species');
   }, [register]);
 
-  function saveFirebase(){
-    // TODO: arrumar isso aqui
-    /*const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64')
-    dbUser.collection("animal").doc(email64).set({
-    }).then((docRef) => {
-      console.log("Document written with ID: ", docRef.id);
-    })
-    .catch((error) => {
+  async function uploadImageAsync(uri) {
+    
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function(e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
+  
+    return blob;
+  }
+
+  async function saveFirebase(){
+
+    const values = getValues();
+    console.log('values: ' + values.personality.playful);
+    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64')
+    dbAnimal.collection("animal").add({
+      values
+    }).then(function(docRef) {
+      console.log("Document written: " + docRef.id);
+      
+      //TODO: verificar pq nao está salvando a imagem
+      if(photoUrl != null){
+
+        uploadImageAsync(photoUrl).then(blob =>{
+
+          if(blob != null){
+            storage
+            .child('images')
+            .child('animals')
+            .child(docRef.id)
+            .child('animalPicture')
+            .put(blob).then(function(snapshot){
+              console.log('Uploaded a blob or file!');
+
+              snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                dbUser.collection("animal").doc(docRef.id).update({
+                  photo: downloadURL,
+                })
+                console.log('File available at', downloadURL);
+              });
+            });
+          }
+        });
+      }
+    }).catch((error) => {
         console.error("Error adding document: ", error);
-    });*/
+    });
     navigation.navigate('Home');
   }
 
@@ -148,7 +198,7 @@ const RegisterAnimalScreen = ({navigation}) => {
         />
         <ImagePicker
           label="fotos do animal"
-          imageCallback={(photo) => setValue('photo', photo)}
+          imageCallback={(photoUrl) => setPhotoUrl(photoUrl)}
         />
         <RadioInputs
           label="Espécie"
