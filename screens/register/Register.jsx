@@ -31,6 +31,7 @@ const Register = ({navigation}) => {
   const [photo, setPhoto] = useState(null);
   const dbUser = firebase.firestore();
   const storage = firebase.storage().ref();
+  I18n.locale = 'pt';
 
   const {colors} = useTheme();
 

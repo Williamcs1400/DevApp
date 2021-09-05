@@ -63,23 +63,6 @@ const CheckboxInputs = ({label, options}) => {
 };
 
 const RegisterAnimalScreen = ({navigation}) => {
-  // TODO: DEFINITIVAMENTE TEM JEITO MELHOR QUE ISSO
-  const [name, setName] = useState('');
-  const [species, setSpecies] = useState('');
-  const [sex, setSex] = useState('');
-  const [size, setSize] = useState('');
-  const [age, setAge] = useState('');
-  const [playful, setPlayful] = useState(false);
-  const [shy, setShy] = useState(false);
-  const [calm, setCalm] = useState(false);
-  const [guard, setGuard] = useState(false);
-  const [lovely, setLovely] = useState(false);
-  const [lazy, setLazy] = useState(false);
-  const [vaccinated, setVaccinated] = useState(false);
-  const [vermifugated, setVermifugated] = useState(false);
-  const [neutered, setNeutered] = useState(false);
-  const [sick, setSick] = useState(false);
-  const [sicknesses, setSicknesses] = useState('');
   const [photoUrl, setPhotoUrl] = useState(null);
   const dbAnimal = firebase.firestore();
   const storage = firebase.storage().ref();
@@ -158,7 +141,6 @@ const RegisterAnimalScreen = ({navigation}) => {
     }).then(function(docRef) {
       console.log("Document written: " + docRef.id);
       
-      //TODO: verificar pq nao está salvando a imagem
       if(photoUrl != null){
 
         uploadImageAsync(photoUrl).then(blob =>{
