@@ -45,7 +45,7 @@ const HomeScreen = ({navigation}) => {
 
   return (
     <View style={{...styles.home, backgroundColor: colors.background}}>
-      <Text style={{color: colors.primary}}>{I18n.t('home')}</Text>
+      {/* <Text style={{color: colors.primary}}>{I18n.t('home')}</Text>
 
       <TouchableRipple>
         <Switch onValueChange={toggleTheme} color="red" value={isThemeDark} />
@@ -62,16 +62,12 @@ const HomeScreen = ({navigation}) => {
       <Button color={colors.terciaryOrange} title="terciaryOrange" />
       <Button color={colors.primaryTeal} title="primaryTeal" />
       <Button color={colors.secondaryTeal} title="secondaryTeal" />
-      <Button color={colors.terciaryTeal} title="terciaryTeal" />
+      <Button color={colors.terciaryTeal} title="terciaryTeal" /> */}
 
-      <Button
+      {/* <Button
         title={I18n.t('goToDetails')}
         onPress={() => navigation.navigate('Details')}
-      />
-      <Button
-        title={I18n.t('register')}
-        onPress={() => navigation.navigate('Login')}
-      />
+      /> */}
       <Button title={lang} onPress={switchLang} />
       <Button title={I18n.t('signOut')} onPress={signout} />
       <Button
@@ -79,7 +75,7 @@ const HomeScreen = ({navigation}) => {
         title="cadastro de bichos"
         onPress={() => navigation.navigate('RegisterAnimalScreen')}
       />
-      <Button color={colors.primaryTeal} title={lang} onPress={switchLang} />
+      {/* <Button color={colors.primaryTeal} title={lang} onPress={switchLang} /> */}
     </View>
   );
 };
