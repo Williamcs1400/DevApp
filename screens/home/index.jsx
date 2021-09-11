@@ -69,6 +69,7 @@ const HomeScreen = ({navigation}) => {
         onPress={() => navigation.navigate('Details')}
       /> */}
       <Button title={lang} onPress={switchLang} />
+      <Button title={'animal list'} onPress={() => navigation.navigate('AnimalsList')} />
       <Button title={I18n.t('signOut')} onPress={signout} />
       <Button
         color={colors.primaryOrange}

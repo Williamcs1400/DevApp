@@ -23,6 +23,7 @@ import {
   ChangeEntry,
   RegisterAnimalScreen,
   AnimalProfileScreen,
+  AnimalsList,
 } from './screens';
 import {PreferencesContext} from './preferencesContext';
 
@@ -71,6 +72,7 @@ function App() {
             <Stack.Screen name="ChangeEntry" component={ChangeEntry} />
             <Stack.Screen name="RegisterAnimalScreen" component={RegisterAnimalScreen} />
             <Stack.Screen name="AnimalProfileScreen" component={AnimalProfileScreen} />
+            <Stack.Screen name="AnimalsList" component={AnimalsList} />
           </Stack.Navigator>
         </NavigationContainer>
       </PaperProvider>
