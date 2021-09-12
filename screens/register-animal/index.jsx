@@ -71,7 +71,7 @@ const RegisterAnimalScreen = ({navigation}) => {
   const {register, setValue, getValues, watch, handleSubmit} = useForm({
     defaultValues: {
       name: '',
-      photo: null,
+      photo: '',
       species: '',
       sex: '',
       size: '',
@@ -155,7 +155,7 @@ const RegisterAnimalScreen = ({navigation}) => {
               console.log('Uploaded a blob or file!');
 
               snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                dbUser.collection("animal").doc(docRef.id).update({
+                dbAnimal.collection("animal").doc(docRef.id).update({
                   photo: downloadURL,
                 })
                 console.log('File available at', downloadURL);
