@@ -156,7 +156,7 @@ const RegisterAnimalScreen = ({navigation}) => {
 
               snapshot.ref.getDownloadURL().then(function(downloadURL) {
                 dbAnimal.collection("animal").doc(docRef.id).update({
-                  photo: downloadURL,
+                  "values.photo": downloadURL,
                 })
                 console.log('File available at', downloadURL);
               });
