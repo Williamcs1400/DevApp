@@ -1,7 +1,6 @@
 import React from 'react';
-import {View, ScrollView, Image, Stack} from 'react-native';
-import { Appbar } from 'react-native-paper';
-import {TextInput, Text, ImagePicker, Label} from '../../components';
+import {View, ScrollView, Image} from 'react-native';
+import {Text} from '../../components';
 import styles from './styles';
 
 const AnimalProfile = (props) => {

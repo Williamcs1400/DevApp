@@ -5,8 +5,9 @@ import {Card, IconButton} from 'react-native-paper';
 import firebase from 'firebase';
 import styles from './styles';
 
-const AnimalsList = ({route, navigation}) => {
+const MyAnimalsList = ({route, navigation}) => {
   const db = firebase.firestore();
+  //const {type} = route.params;
   const [animals, setAnimals] = useState([]);
   const [allFieldsAnimals, setAllFieldsAnimals] = useState([]);
   I18n.locale = 'pt';
@@ -14,7 +15,9 @@ const AnimalsList = ({route, navigation}) => {
 
   const getList = async () => {
 
-    db.collection('animal').get().then((querySnapshot) => {
+    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64')
+
+    db.collection('animal').where('values.creatorUser', '==', email64).get().then((querySnapshot) => {
       let aux = []
       let auxAll = []
       querySnapshot.forEach((doc) => {
@@ -79,11 +82,6 @@ const AnimalsList = ({route, navigation}) => {
             style={{width: '100%',height: 400, alignSelf:'center'}}
             source={{uri: photo}}>          
           </Image>
-          <View style={styles.viewBottom} >
-            <Text style={styles.textBottom} onPress={() => selectAdopt(key)}>
-              {I18n.t('toAdopt')}
-            </Text>
-          </View>
         </Card>
       ))}
     </ScrollView>
@@ -91,4 +89,4 @@ const AnimalsList = ({route, navigation}) => {
     );
   };
 
-export default AnimalsList;
+export default MyAnimalsList;

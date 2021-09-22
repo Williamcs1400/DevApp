@@ -24,6 +24,7 @@ import {
   RegisterAnimalScreen,
   AnimalProfileScreen,
   AnimalsList,
+  MyAnimalsList
 } from './screens';
 import {PreferencesContext} from './preferencesContext';
 import {CustomDrawer} from './components';
@@ -94,6 +95,11 @@ function App() {
               name="AnimalProfileScreen"
               component={AnimalProfileScreen}
               options={{hidden: true}}
+            />
+            <Drawer.Screen
+              name="MyAnimalsList"
+              options={{title: 'Meus animais'}}
+              component={MyAnimalsList}
             />
             <Drawer.Screen
               name="AnimalsList"

@@ -133,14 +133,13 @@ const RegisterAnimalScreen = ({navigation}) => {
 
   async function saveFirebase(){
 
-    const values = getValues();
-    console.log('values: ' + values.personality.playful);
     const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64')
+    setValue('creatorUser', email64);
+    const values = getValues();
     dbAnimal.collection("animal").add({
       values
     }).then(function(docRef) {
       console.log("Document written: " + docRef.id);
-      
       if(photoUrl != null){
 
         uploadImageAsync(photoUrl).then(blob =>{
