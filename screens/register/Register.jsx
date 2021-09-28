@@ -3,6 +3,7 @@ import {ScrollView, View} from 'react-native';
 import I18n from 'i18n-js';
 import {useTheme, Button, Card, Paragraph} from 'react-native-paper';
 import {TextInput, Text, ImagePicker} from '../../components';
+import firebase from 'firebase';
 
 const styles = {
   inputGroupView: {
@@ -27,6 +28,10 @@ const Register = ({navigation}) => {
   const [username, setUsername] = useState('');
   const [password, setPassword] = useState('');
   const [passwordConfirm, setPasswordConfirm] = useState('');
+  const [photo, setPhoto] = useState(null);
+  const dbUser = firebase.firestore();
+  const storage = firebase.storage().ref();
+  I18n.locale = 'pt';
 
   const {colors} = useTheme();
 
@@ -52,6 +57,89 @@ const Register = ({navigation}) => {
         </Card>
       </View>
     );
+  }
+
+  async function uploadImageAsync(uri) {
+    
+    const blob = await new Promise((resolve, reject) => {
+      const xhr = new XMLHttpRequest();
+      xhr.onload = function() {
+        resolve(xhr.response);
+      };
+      xhr.onerror = function(e) {
+        console.log(e);
+        reject(new TypeError('Network request failed'));
+      };
+      xhr.responseType = 'blob';
+      xhr.open('GET', uri, true);
+      xhr.send(null);
+    });
+  
+    return blob;
+  }
+
+  async function loginEmailAndPassword(){
+    if(email != null && password != null){
+      firebase.auth().createUserWithEmailAndPassword(email, password)
+      .then(() => {
+        console.log('User account created & signed in!');
+        const email64 = new Buffer(email).toString('base64')
+        navigation.navigate('Home')
+        dbUser.collection("users").doc(email64).set({
+          email: email,
+          fullName: fullName,
+          age: age,
+          province: province,
+          city: city,
+          anddress: address,
+          phone: phone,
+          userName: username,
+          photoURL: ""
+        })
+        .then((docRef) => {
+          console.log("photo: " + photo)
+
+          if(photo != null){
+            uploadImageAsync(photo).then(blob =>{
+
+              if(blob != null){
+                storage
+                .child('images')
+                .child('users')
+                .child(email64)
+                .child('profilePicture')
+                .put(blob).then(function(snapshot){
+                  console.log('Uploaded a blob or file!');
+  
+                  snapshot.ref.getDownloadURL().then(function(downloadURL) {
+                    dbUser.collection("users").doc(email64).update({
+                      photoURL: downloadURL,
+                    })
+                    console.log('File available at', downloadURL);
+                  });
+                });
+              }
+            });
+          }
+        })
+        .catch((error) => {
+            console.error("Error adding document: ", error);
+        });
+        })
+      .catch(error => {
+        console.log('ERROR')
+      if (error.code === 'auth/email-already-in-use') {
+        console.log('That email address is already in use!');
+      }
+  
+      if (error.code === 'auth/invalid-email') {
+        console.log('That email address is invalid!');
+      }
+        console.error(error);
+      });
+    }else{
+      console.log('Email ou senha vazios')
+    }
   }
   
   return (
@@ -116,12 +204,16 @@ const Register = ({navigation}) => {
         isSecure={true}
       />
 
-      <ImagePicker label="profile picture" />
+      <ImagePicker 
+        label="profile picture" 
+        imageCallback={(photo) => setPhoto(photo)}
+        />
 
       <Button
         mode="contained"
         theme={{roundness: 0}}
         style={{width: '60%', alignSelf: 'center'}}
+        onPress={() => loginEmailAndPassword()}
       >
         {I18n.t('confirmSignUp')}
       </Button>
