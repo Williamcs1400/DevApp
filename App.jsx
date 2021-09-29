@@ -24,7 +24,8 @@ import {
   RegisterAnimalScreen,
   AnimalProfileScreen,
   AnimalsList,
-  MyAnimalsList
+  MyAnimalsList,
+  Notifications
 } from './screens';
 import {PreferencesContext} from './preferencesContext';
 import {CustomDrawer} from './components';
@@ -105,6 +106,11 @@ function App() {
               name="AnimalsList"
               options={{title: 'Adotar'}}
               component={AnimalsList}
+            />
+            <Drawer.Screen
+              name="Notifications"
+              options={{title: 'Notificações'}}
+              component={Notifications}
             />
           </Drawer.Navigator>
         </NavigationContainer>

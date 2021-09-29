@@ -18,23 +18,24 @@ const AnimalsList = ({route, navigation}) => {
       let aux = []
       let auxAll = []
       querySnapshot.forEach((doc) => {
-          auxAll.push(doc.get('values'));
-
-          if(doc.get('values.photo') == null){
-            const animal = {
-              key: cont++,
-              nome: doc.get('values.name'),
-              photo: 'https://firebasestorage.googleapis.com/v0/b/devapps-meau-9acf8.appspot.com/o/images%2Fanimals%2Fdefault%2Fdefault.jpg?alt=media&token=d3ffc04c-9048-45ea-9410-b12d00a381e5',
-            };
-            aux.push(animal);
-          }else{
-            const animal = {
-              key: cont++,
-              nome: doc.get('values.name'),
-              photo: doc.get('values.photo'),
-            };
-            aux.push(animal);
-          }
+        auxAll.push(doc.get('values'));
+        if(doc.get('values.photo') == null){
+          const animal = {
+            key: cont++,
+            nome: doc.get('values.name'),
+            photo: 'https://firebasestorage.googleapis.com/v0/b/devapps-meau-9acf8.appspot.com/o/images%2Fanimals%2Fdefault%2Fdefault.jpg?alt=media&token=d3ffc04c-9048-45ea-9410-b12d00a381e5',
+            hash: doc.id
+          };
+          aux.push(animal);
+        }else{
+          const animal = {
+            key: cont++,
+            nome: doc.get('values.name'),
+            photo: doc.get('values.photo'),
+            hash: doc.id
+          };
+          aux.push(animal);
+        }
       });
         setAnimals(aux);
         setAllFieldsAnimals(auxAll);
@@ -51,11 +52,27 @@ const AnimalsList = ({route, navigation}) => {
   
   function selectAdopt(selectKey){
     console.log('selectAdopt:', selectKey);
+    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64')
+    
+    if(allFieldsAnimals[selectKey].creatorUser != email64){
+      db.collection('notifications').add({
+        requesterUser: email64,
+        ownerUser: allFieldsAnimals[selectKey].creatorUser,
+        idAnimal: animals[selectKey].hash,
+        nameAnimal: animals[selectKey].nome,
+        photoAnimal: animals[selectKey].photo,
+        notified: false,
+      }).then(function(docRef) {
+        console.log("Document written notification: " + docRef.id);
+      }).catch((error) => {
+        console.error("Error adding document: ", error);
+      });;
+    }
   }
 
   useEffect(() => {
     getList();
-    // console.log(animals);
+    console.log(animals);
   }, []);
 
   return(

@@ -51,14 +51,10 @@ const MyAnimalsList = ({route, navigation}) => {
     console.log('selectCard - selectKey: ' + selectKey);
     navigation.navigate('AnimalProfileScreen', {animal: allFieldsAnimals[selectKey]});
   }
-  
-  function selectAdopt(selectKey){
-    console.log('selectAdopt:', selectKey);
-  }
 
   useEffect(() => {
     getList();
-    // console.log(animals);
+    console.log(animals);
   }, []);
 
   return(

@@ -2,7 +2,7 @@ import React, {useState} from "react";
 import I18n from 'i18n-js';
 import { View, Text, useColorScheme, Image, Button, TouchableOpacity } from 'react-native';
 import {useTheme, withTheme, TouchableRipple, Switch} from 'react-native-paper';
-import Ops from '../../sources/Ops.png'
+import Ops from '../../sources/Ops.png';
 import styles from "./styles";
 
 const ChangeEntry = ({navigation}) => {
