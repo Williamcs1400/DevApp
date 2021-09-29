@@ -63,7 +63,7 @@ const AnimalsList = ({route, navigation}) => {
 
   return (
     <View style={{flex: 1}}>
-      <ScrollView contentContainerStyle={{paddingVertical: 20, paddingHorizontal: 5}}>
+      <ScrollView contentContainerStyle={{padding: 8}}>
         {animals.map((animal) => (
           <AnimalCard
             animal={animal}
