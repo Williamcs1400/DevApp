@@ -34,7 +34,7 @@ const AnimalCard = (props) => {
           fontWeight: 'bold',
           fontSize: 16,
         }}
-        title={animal.nome}
+        title={animal.name}
         right={() => (
           <IconButton
             icon="heart-outline"
@@ -43,7 +43,13 @@ const AnimalCard = (props) => {
           />
         )}
       />
-      <Card.Cover source={{uri: animal.photo}} />
+      <Card.Cover
+        source={{
+          uri:
+            animal.photo ||
+            'https://firebasestorage.googleapis.com/v0/b/devapps-meau-9acf8.appspot.com/o/images%2Fanimals%2Fdefault%2Fdefault.jpg?alt=media&token=d3ffc04c-9048-45ea-9410-b12d00a381e5',
+        }}
+      />
       <Card.Content>
         <View
           style={{
@@ -53,9 +59,9 @@ const AnimalCard = (props) => {
             paddingTop: 4,
           }}
         >
-          <Text color={colors.primaryBlack}>GENDER</Text>
-          <Text color={colors.primaryBlack}>AGE</Text>
-          <Text color={colors.primaryBlack}>SIZE</Text>
+          <Text color={colors.primaryBlack}>{animal.sex}</Text>
+          <Text color={colors.primaryBlack}>{animal.age}</Text>
+          <Text color={colors.primaryBlack}>{animal.size}</Text>
         </View>
         <View
           style={{
