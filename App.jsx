@@ -2,7 +2,7 @@
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {Provider as PaperProvider} from 'react-native-paper';
+import {Provider as PaperProvider, useTheme} from 'react-native-paper';
 import I18n from 'i18n-js';
 import {
   useFonts,
@@ -68,6 +68,12 @@ function App() {
         <NavigationContainer theme={meauTheme(isThemeDark)}>
           <Drawer.Navigator
             initialRouteName="Home"
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: meauTheme(isThemeDark).colors.secondaryOrange,
+              },
+              headerTitleStyle: {color: meauTheme(isThemeDark).colors.primaryBlack},
+            }}
             drawerContent={(props) => <CustomDrawer {...props} />}
           >
             <Drawer.Screen name="Home" component={HomeScreen} />

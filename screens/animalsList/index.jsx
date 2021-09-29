@@ -1,16 +1,13 @@
-import React, { useState, useEffect } from 'react';
+import React, {useState, useEffect} from 'react';
 import I18n from 'i18n-js';
-import {View, Text, ScrollView, Image } from 'react-native';
-import {Card, IconButton} from 'react-native-paper';
+import {View, ScrollView} from 'react-native';
 import firebase from 'firebase';
-import styles from './styles';
+import {AnimalCard} from '../../components';
 
 const AnimalsList = ({route, navigation}) => {
   const db = firebase.firestore();
-  const [animals, setAnimals] = useState([]);
   const [allFieldsAnimals, setAllFieldsAnimals] = useState([]);
   I18n.locale = 'pt';
-  let cont = 0;
 
   const getList = async () => {
 
@@ -41,16 +38,16 @@ const AnimalsList = ({route, navigation}) => {
         setAllFieldsAnimals(auxAll);
       })
       .catch((e) => {
-        console.error('Error: ' + e);
+        console.error(`Error: ${e}`);
       });
   };
 
-  function selectCard(selectKey){
-    console.log('selectCard - selectKey: ' + selectKey);
+  const selectCard = (selectKey) => {
+    console.log(`selectCard - selectKey: ${selectKey}`);
     navigation.navigate('AnimalProfileScreen', {animal: allFieldsAnimals[selectKey]});
-  }
-  
-  function selectAdopt(selectKey){
+  };
+
+  function selectAdopt(selectKey) {
     console.log('selectAdopt:', selectKey);
     const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64')
     
@@ -75,37 +72,19 @@ const AnimalsList = ({route, navigation}) => {
     console.log(animals);
   }, []);
 
-  return(
-    <View style={{ flex: 1 }}>
-    <ScrollView contentContainerStyle={{ paddingVertical: 20 }}>
-      {animals.map(({ nome, photo, key}) => (
-        <Card style={styles.card}>
-          <View style={styles.flex}>
-            <Text style={styles.textCard}>
-              {nome}
-            </Text>
-            <IconButton
-              icon="alert-circle"
-              color={'#434343'}
-              size={30}
-              style={styles.iconAlert}
-              onPress={() => selectCard(key)}
-            />
-          </View>
-          <Image
-            style={{width: '100%',height: 400, alignSelf:'center'}}
-            source={{uri: photo}}>          
-          </Image>
-          <View style={styles.viewBottom} >
-            <Text style={styles.textBottom} onPress={() => selectAdopt(key)}>
-              {I18n.t('toAdopt')}
-            </Text>
-          </View>
-        </Card>
-      ))}
-    </ScrollView>
-  </View>
-    );
-  };
+  return (
+    <View style={{flex: 1}}>
+      <ScrollView contentContainerStyle={{padding: 8}}>
+        {allFieldsAnimals.map((animal) => (
+          <AnimalCard
+            animal={animal}
+            key={animal.name + animal.photo}
+            onPressCard={() => selectCard(animal.key)}
+          />
+        ))}
+      </ScrollView>
+    </View>
+  );
+};
 
 export default AnimalsList;
