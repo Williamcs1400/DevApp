@@ -18,13 +18,15 @@ const Notifications = ({route, navigation}) => {
     await db.collection('notifications').where('ownerUser', '==', email64).get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-          getOwnerName(doc.get('ownerUser'));
+
+          
+          // getOwnerName(doc.get('ownerUser'));
           // const ownerName = getOwnerName(doc.get('ownerUser'));
           // console.log('name: ', name);
           const noti = {
             idAnimal: doc.get('idAnimal'),
             requesterUser: doc.get('requesterUser'),
-            ownerUser: 'getOwnerName(doc',
+            ownerUser: doc.get('ownerUser'),
             nameAnimal: doc.get('nameAnimal'),
           };
           aux.push(noti);

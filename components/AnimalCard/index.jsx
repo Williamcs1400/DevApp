@@ -1,4 +1,4 @@
-import React from 'react';
+import React, {useEffect, useState} from 'react';
 import PropTypes from 'prop-types';
 import {Card, useTheme, IconButton, Button} from 'react-native-paper';
 import I18n from 'i18n-js';
@@ -10,13 +10,14 @@ const AnimalCard = (props) => {
   const {colors} = useTheme();
   const {animal, onPressCard} = props;
   const db = firebase.firestore();
+  const {username, setUsername} = useState();
 
-  function selectAdopt() {
+  async function selectAdopt() {
     console.log('selectAdopt: ', animal.name);
-    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64')
-    
+    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
+
     if(animal.creatorUser != email64){
-      db.collection('notifications').add({
+      await db.collection('notifications').add({
         requesterUser: email64,
         ownerUser: animal.creatorUser,
         nameAnimal: animal.name,
@@ -28,8 +29,14 @@ const AnimalCard = (props) => {
         console.error("Error adding document: ", error);
       });
     }
-    console.log('AAAAAAAAAAAAAAAAAAAA', animal.name);
   }
+
+  // useEffect(() => {
+  //   const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
+  //   db.collection('users').doc(email64).get().then((docRef) => {
+  //     setUsername(docRef.get('fullName'));
+  //   });
+  // }, []);
 
   return (
     <Card
