@@ -19,10 +19,12 @@ const Notifications = ({route, navigation}) => {
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
           getOwnerName(doc.get('ownerUser'));
+          // const ownerName = getOwnerName(doc.get('ownerUser'));
+          // console.log('name: ', name);
           const noti = {
             idAnimal: doc.get('idAnimal'),
             requesterUser: doc.get('requesterUser'),
-            ownerUser: doc.get('ownerUser'),
+            ownerUser: 'getOwnerName(doc',
             nameAnimal: doc.get('nameAnimal'),
           };
           aux.push(noti);
@@ -56,24 +58,12 @@ const Notifications = ({route, navigation}) => {
   }
 
   console.log('aux: ' , listNotifications);
-
   
-  function getAnimalName(id){
-    const animalNameDB = firebase.firestore();
-    animalNameDB.collection('animal').doc(id).get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        return doc.get('values.name');
-      });
-    });
-  }
-  
-  function getOwnerName(id){
-    const animalNameDB = firebase.firestore();
-    animalNameDB.collection('users').doc(id).get().then((querySnapshot) => {
-      querySnapshot.forEach((doc) => {
-        console.log('name', doc.get('fullName'))
-        return doc.get('fullName');
-      });
+  async function getOwnerName(id){
+    const userNameDB = firebase.firestore();
+    await userNameDB.collection('users').doc(id).get().then((querySnapshot) => {
+      console.log('fullname: ', querySnapshot.get('fullName'));
+      return querySnapshot.get('fullName');
     });
   }
 

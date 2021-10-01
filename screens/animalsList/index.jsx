@@ -1,35 +1,39 @@
 import React, {useState, useEffect} from 'react';
 import I18n from 'i18n-js';
-import {View, ScrollView} from 'react-native';
+import {View, ScrollView, Text} from 'react-native';
 import firebase from 'firebase';
 import {AnimalCard} from '../../components';
 
 const AnimalsList = ({route, navigation}) => {
   const db = firebase.firestore();
+  const [animals, setAnimals] = useState([]);
   const [allFieldsAnimals, setAllFieldsAnimals] = useState([]);
   I18n.locale = 'pt';
 
   const getList = async () => {
 
     db.collection('animal').get().then((querySnapshot) => {
-      let aux = []
-      let auxAll = []
+      let aux = [];
+      let auxAll = [];
+      let count = 0;
       querySnapshot.forEach((doc) => {
         auxAll.push(doc.get('values'));
         if(doc.get('values.photo') == null){
           const animal = {
-            key: cont++,
+            key: count++,
             nome: doc.get('values.name'),
             photo: 'https://firebasestorage.googleapis.com/v0/b/devapps-meau-9acf8.appspot.com/o/images%2Fanimals%2Fdefault%2Fdefault.jpg?alt=media&token=d3ffc04c-9048-45ea-9410-b12d00a381e5',
-            hash: doc.id
+            hash: doc.id,
+            creatorUser: doc.get('values.creatorUser'),
           };
           aux.push(animal);
         }else{
           const animal = {
-            key: cont++,
+            key: count++,
             nome: doc.get('values.name'),
             photo: doc.get('values.photo'),
-            hash: doc.id
+            hash: doc.id,
+            creatorUser: doc.get('values.creatorUser'),
           };
           aux.push(animal);
         }
@@ -46,26 +50,6 @@ const AnimalsList = ({route, navigation}) => {
     console.log(`selectCard - selectKey: ${selectKey}`);
     navigation.navigate('AnimalProfileScreen', {animal: allFieldsAnimals[selectKey]});
   };
-
-  function selectAdopt(selectKey) {
-    console.log('selectAdopt:', selectKey);
-    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64')
-    
-    if(allFieldsAnimals[selectKey].creatorUser != email64){
-      db.collection('notifications').add({
-        requesterUser: email64,
-        ownerUser: allFieldsAnimals[selectKey].creatorUser,
-        idAnimal: animals[selectKey].hash,
-        nameAnimal: animals[selectKey].nome,
-        photoAnimal: animals[selectKey].photo,
-        notified: false,
-      }).then(function(docRef) {
-        console.log("Document written notification: " + docRef.id);
-      }).catch((error) => {
-        console.error("Error adding document: ", error);
-      });;
-    }
-  }
 
   useEffect(() => {
     getList();
