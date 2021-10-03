@@ -9,6 +9,7 @@ const AnimalsList = ({route, navigation}) => {
   const [animals, setAnimals] = useState([]);
   const [allFieldsAnimals, setAllFieldsAnimals] = useState([]);
   const [name, setName] = useState();
+  const [photoUser, setPhotoUser] = useState();
   const [flag, setFlag] = useState(false);
   I18n.locale = 'pt';
 
@@ -54,7 +55,9 @@ const AnimalsList = ({route, navigation}) => {
 
     await db.collection('users').doc(email64).get().then((querySnapshot) => {
       let fullName = querySnapshot.get('fullName');
+      let photoURL = querySnapshot.get('photoURL');
       setName(fullName);
+      setPhotoUser(photoURL);
     }); 
     setFlag(true);
   } 
@@ -79,6 +82,7 @@ const AnimalsList = ({route, navigation}) => {
           <AnimalCard
             animal={animal}
             currentUserName={name}
+            userPhoto={photoUser}
             key={animal.name + animal.photo}
             onPressCard={() => selectCard(animal.key)}
           />

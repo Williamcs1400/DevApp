@@ -1,5 +1,5 @@
 import React, {useState, useEffect} from 'react';
-import {View, Text, ScrollView } from 'react-native';
+import {View, Text, ScrollView, Image } from 'react-native';
 import {Card, IconButton} from 'react-native-paper';
 import { Audio } from 'expo-av';
 import firebase from 'firebase';
@@ -24,6 +24,7 @@ const Notifications = ({route, navigation}) => {
             requesterUser: doc.get('requesterUser'),
             ownerUser: doc.get('ownerUser'),
             nameAnimal: doc.get('nameAnimal'),
+            photoUser: doc.get('photoUser'),
           };
           aux.push(noti);
 
@@ -39,6 +40,8 @@ const Notifications = ({route, navigation}) => {
     setListNotifications(aux);
     setTimeout(getNotifications, 10000);
   }
+
+  console.log('listNotifications: ', listNotifications);
 
   async function playSoundNotification(){
     const { sound } = await Audio.Sound.createAsync(require('../../sources/meow.mp3'));
@@ -59,11 +62,14 @@ const Notifications = ({route, navigation}) => {
   }, []);
 
   return(
-    <View style={{ flex: 1 }}>
-    <ScrollView contentContainerStyle={{ paddingVertical: 20 }}>
-      {listNotifications.map(({ nameAnimal, ownerUser, requesterUser}) => (
+    <View>
+    <ScrollView contentContainerStyle={styles.scroolStyle}>
+      {listNotifications.map(({ nameAnimal, requesterUser, photoUser}) => (
         <Card style={styles.card}>
-          <Text>{requesterUser} está pedindo para adotar o {nameAnimal}</Text>
+          <View style={styles.mainView}>
+            <Image source={{uri: photoUser}} style={styles.imageUser}></Image>
+            <Text>{requesterUser} está pedindo para adotar o {nameAnimal}</Text>
+          </View>
         </Card>
       ))}
     </ScrollView>

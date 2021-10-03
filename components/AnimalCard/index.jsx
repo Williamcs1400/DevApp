@@ -8,7 +8,7 @@ import firebase from 'firebase';
 
 const AnimalCard = (props) => {
   const {colors} = useTheme();
-  const {animal, onPressCard, currentUserName} = props;
+  const {animal, onPressCard, currentUserName, userPhoto} = props;
   const db = firebase.firestore();
   const {username, setUsername} = useState();
 
@@ -19,6 +19,7 @@ const AnimalCard = (props) => {
     if(animal.creatorUser != email64){
       await db.collection('notifications').add({
         requesterUser: currentUserName,
+        photoUser: userPhoto,
         ownerUser: animal.creatorUser,
         nameAnimal: animal.name,
         photoAnimal: animal.photo,
