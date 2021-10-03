@@ -8,11 +8,14 @@ const AnimalsList = ({route, navigation}) => {
   const db = firebase.firestore();
   const [animals, setAnimals] = useState([]);
   const [allFieldsAnimals, setAllFieldsAnimals] = useState([]);
+  const [name, setName] = useState();
+  const [flag, setFlag] = useState(false);
   I18n.locale = 'pt';
 
   const getList = async () => {
+    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
 
-    db.collection('animal').get().then((querySnapshot) => {
+    db.collection('animal').where('values.creatorUser', '!=', email64).get().then((querySnapshot) => {
       let aux = [];
       let auxAll = [];
       let count = 0;
@@ -46,6 +49,16 @@ const AnimalsList = ({route, navigation}) => {
       });
   };
 
+  async function getCurrentName(){
+    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
+
+    await db.collection('users').doc(email64).get().then((querySnapshot) => {
+      let fullName = querySnapshot.get('fullName');
+      setName(fullName);
+    }); 
+    setFlag(true);
+  } 
+
   const selectCard = (selectKey) => {
     console.log(`selectCard - selectKey: ${selectKey}`);
     navigation.navigate('AnimalProfileScreen', {animal: allFieldsAnimals[selectKey]});
@@ -53,6 +66,9 @@ const AnimalsList = ({route, navigation}) => {
 
   useEffect(() => {
     getList();
+    if(!flag){
+      getCurrentName();
+    }
     console.log(animals);
   }, []);
 
@@ -62,6 +78,7 @@ const AnimalsList = ({route, navigation}) => {
         {allFieldsAnimals.map((animal) => (
           <AnimalCard
             animal={animal}
+            currentUserName={name}
             key={animal.name + animal.photo}
             onPressCard={() => selectCard(animal.key)}
           />

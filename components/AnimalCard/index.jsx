@@ -8,7 +8,7 @@ import firebase from 'firebase';
 
 const AnimalCard = (props) => {
   const {colors} = useTheme();
-  const {animal, onPressCard} = props;
+  const {animal, onPressCard, currentUserName} = props;
   const db = firebase.firestore();
   const {username, setUsername} = useState();
 
@@ -18,7 +18,7 @@ const AnimalCard = (props) => {
 
     if(animal.creatorUser != email64){
       await db.collection('notifications').add({
-        requesterUser: email64,
+        requesterUser: currentUserName,
         ownerUser: animal.creatorUser,
         nameAnimal: animal.name,
         photoAnimal: animal.photo,
@@ -30,13 +30,6 @@ const AnimalCard = (props) => {
       });
     }
   }
-
-  // useEffect(() => {
-  //   const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
-  //   db.collection('users').doc(email64).get().then((docRef) => {
-  //     setUsername(docRef.get('fullName'));
-  //   });
-  // }, []);
 
   return (
     <Card

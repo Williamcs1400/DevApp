@@ -19,10 +19,6 @@ const Notifications = ({route, navigation}) => {
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
 
-          
-          // getOwnerName(doc.get('ownerUser'));
-          // const ownerName = getOwnerName(doc.get('ownerUser'));
-          // console.log('name: ', name);
           const noti = {
             idAnimal: doc.get('idAnimal'),
             requesterUser: doc.get('requesterUser'),
@@ -41,7 +37,6 @@ const Notifications = ({route, navigation}) => {
         console.error('Error: ' + e);
       });
     setListNotifications(aux);
-
     setTimeout(getNotifications, 10000);
   }
 
@@ -59,16 +54,6 @@ const Notifications = ({route, navigation}) => {
     })
   }
 
-  console.log('aux: ' , listNotifications);
-  
-  async function getOwnerName(id){
-    const userNameDB = firebase.firestore();
-    await userNameDB.collection('users').doc(id).get().then((querySnapshot) => {
-      console.log('fullname: ', querySnapshot.get('fullName'));
-      return querySnapshot.get('fullName');
-    });
-  }
-
   useEffect(() => {
     getNotifications();
   }, []);
@@ -76,9 +61,9 @@ const Notifications = ({route, navigation}) => {
   return(
     <View style={{ flex: 1 }}>
     <ScrollView contentContainerStyle={{ paddingVertical: 20 }}>
-      {listNotifications.map(({ nameAnimal, ownerUser}) => (
+      {listNotifications.map(({ nameAnimal, ownerUser, requesterUser}) => (
         <Card style={styles.card}>
-          <Text>{ownerUser} está pedindo para adotar o {nameAnimal}</Text>
+          <Text>{requesterUser} está pedindo para adotar o {nameAnimal}</Text>
         </Card>
       ))}
     </ScrollView>
