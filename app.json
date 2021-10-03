@@ -26,6 +26,9 @@
       "package": "com.devapps.meau",
       "googleServicesFile": "./google-services.json"
     },
+    "androidStatusBar": {
+      "backgroundColor": "#F7a800"
+    },
     "web": {
       "favicon": "./assets/favicon.png"
     }

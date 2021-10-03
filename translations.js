@@ -22,6 +22,7 @@ export const pt = {
   profilePicture: "Foto de perfil",
   confirmSignUp: "Fazer cadastro",
   addPicture: "adicionar foto",
+  toAdopt: "Adotar",
 };
 
 export const en = {
@@ -48,4 +49,5 @@ export const en = {
   profilePicture: "Profile picture",
   confirmSignUp: "Sign up",
   addPicture: "add picture",
+  toAdopt: "Adopt",
 };

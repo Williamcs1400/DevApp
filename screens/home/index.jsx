@@ -1,7 +1,7 @@
 import React, {useState} from 'react';
 import {View, Button} from 'react-native';
 import I18n from 'i18n-js';
-import {useTheme, withTheme, TouchableRipple, Switch, Text} from 'react-native-paper';
+import {useTheme} from 'react-native-paper';
 import styles from './styles';
 import {PreferencesContext} from '../../preferencesContext';
 import firebase from 'firebase';
@@ -68,13 +68,24 @@ const HomeScreen = ({navigation}) => {
         title={I18n.t('goToDetails')}
         onPress={() => navigation.navigate('Details')}
       /> */}
-      <Button title={lang} onPress={switchLang} />
+      {/* <Button title={lang} onPress={switchLang} />
+      {/* <Button title={'Lista de animais'} onPress={() => navigation.navigate('AnimalsList', {type: 'all'})} /> */}
+      {/* <Button
+        color={colors.primaryOrange}
+        title="Meus animais"
+        onPress={() => navigation.navigate('AnimalsList', {type: 'my'})} */}
+      {/* /> */}
       <Button title={I18n.t('signOut')} onPress={signout} />
       <Button
         color={colors.primaryOrange}
-        title="cadastro de bichos"
+        title="Cadastro de animais"
         onPress={() => navigation.navigate('RegisterAnimalScreen')}
       />
+      {/* <Button
+        color={colors.primaryOrange}
+        title="cadastro de bichos"
+        onPress={() => navigation.navigate('AnimalsList')}
+      /> */}
       {/* <Button color={colors.primaryTeal} title={lang} onPress={switchLang} /> */}
     </View>
   );

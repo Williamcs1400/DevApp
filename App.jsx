@@ -1,8 +1,8 @@
 /* eslint-disable camelcase */
 import React from 'react';
 import {NavigationContainer} from '@react-navigation/native';
-import {createNativeStackNavigator} from '@react-navigation/native-stack';
-import {Provider as PaperProvider} from 'react-native-paper';
+import {createDrawerNavigator} from '@react-navigation/drawer';
+import {Provider as PaperProvider, useTheme} from 'react-native-paper';
 import I18n from 'i18n-js';
 import {
   useFonts,
@@ -23,8 +23,12 @@ import {
   ChangeEntry,
   RegisterAnimalScreen,
   AnimalProfileScreen,
+  AnimalsList,
+  MyAnimalsList,
+  Notifications
 } from './screens';
 import {PreferencesContext} from './preferencesContext';
+import {CustomDrawer} from './components';
 
 I18n.translations = {
   en,
@@ -34,7 +38,7 @@ I18n.translations = {
 I18n.locale = 'en';
 I18n.fallbacks = true;
 
-const Stack = createNativeStackNavigator();
+const Drawer = createDrawerNavigator();
 
 function App() {
   useFonts({
@@ -58,20 +62,63 @@ function App() {
     }),
     [toggleTheme, isThemeDark],
   );
-
   return (
     <PreferencesContext.Provider value={preferences}>
       <PaperProvider theme={meauTheme(isThemeDark)}>
         <NavigationContainer theme={meauTheme(isThemeDark)}>
-          <Stack.Navigator initialRouteName="Home">
-            <Stack.Screen name="Home" component={HomeScreen} />
-            <Stack.Screen name="Details" component={DetailsScreen} />
-            <Stack.Screen name="Login" component={Login} />
-            <Stack.Screen name="Register" component={Register} />
-            <Stack.Screen name="ChangeEntry" component={ChangeEntry} />
-            <Stack.Screen name="RegisterAnimalScreen" component={RegisterAnimalScreen} />
-            <Stack.Screen name="AnimalProfileScreen" component={AnimalProfileScreen} />
-          </Stack.Navigator>
+          <Drawer.Navigator
+            initialRouteName="Home"
+            screenOptions={{
+              headerStyle: {
+                backgroundColor: meauTheme(isThemeDark).colors.secondaryOrange,
+              },
+              headerTitleStyle: {color: meauTheme(isThemeDark).colors.primaryBlack},
+            }}
+            drawerContent={(props) => <CustomDrawer {...props} />}
+          >
+            <Drawer.Screen name="Home" component={HomeScreen} />
+            <Drawer.Screen
+              name="Details"
+              component={DetailsScreen}
+              options={{hidden: true}}
+            />
+            <Drawer.Screen name="Login" component={Login} options={{hidden: true}} />
+            <Drawer.Screen
+              name="Register"
+              component={Register}
+              options={{hidden: true}}
+            />
+            <Drawer.Screen
+              name="ChangeEntry"
+              component={ChangeEntry}
+              options={{hidden: true}}
+            />
+            <Drawer.Screen
+              name="RegisterAnimalScreen"
+              options={{title: 'Cadastro de animais'}}
+              component={RegisterAnimalScreen}
+            />
+            <Drawer.Screen
+              name="AnimalProfileScreen"
+              component={AnimalProfileScreen}
+              options={{hidden: true}}
+            />
+            <Drawer.Screen
+              name="MyAnimalsList"
+              options={{title: 'Meus animais'}}
+              component={MyAnimalsList}
+            />
+            <Drawer.Screen
+              name="AnimalsList"
+              options={{title: 'Adotar'}}
+              component={AnimalsList}
+            />
+            <Drawer.Screen
+              name="Notifications"
+              options={{title: 'Notificações'}}
+              component={Notifications}
+            />
+          </Drawer.Navigator>
         </NavigationContainer>
       </PaperProvider>
     </PreferencesContext.Provider>
