@@ -11,10 +11,10 @@ export default StyleSheet.create({
     borderRadius: 5,
   },
   mainView: {
-    flexDirection: 'row',
     flex: 1,
-    flexWrap: 'wrap',
-    alignItems: 'stretch',
+    flexDirection: 'row',
+    alignContent: 'stretch',
+    justifyContent: 'space-between'
   },
   scroolStyle: {
     paddingVertical: 10
@@ -22,5 +22,12 @@ export default StyleSheet.create({
   imageUser: {
     height: 75,
     width: 75,
+  },
+  textAdopt: {
+    marginLeft: 10,
+    marginRight: 100,
+    alignSelf: 'center',
+    fontSize: 16,
+    color: '#434343'
   },
 });

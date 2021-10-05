@@ -68,7 +68,7 @@ const Notifications = ({route, navigation}) => {
         <Card style={styles.card}>
           <View style={styles.mainView}>
             <Image source={{uri: photoUser}} style={styles.imageUser}></Image>
-            <Text>{requesterUser} está pedindo para adotar o {nameAnimal}</Text>
+            <Text style={styles.textAdopt}>{requesterUser} está pedindo para adotar o {nameAnimal}</Text>
           </View>
         </Card>
       ))}
