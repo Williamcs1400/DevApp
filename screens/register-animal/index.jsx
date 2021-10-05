@@ -71,7 +71,7 @@ const RegisterAnimalScreen = ({navigation}) => {
   const {register, setValue, getValues, watch, handleSubmit} = useForm({
     defaultValues: {
       name: '',
-      photo: null,
+      photo: '',
       species: '',
       sex: '',
       size: '',
@@ -133,14 +133,13 @@ const RegisterAnimalScreen = ({navigation}) => {
 
   async function saveFirebase(){
 
-    const values = getValues();
-    console.log('values: ' + values.personality.playful);
     const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64')
+    setValue('creatorUser', email64);
+    const values = getValues();
     dbAnimal.collection("animal").add({
       values
     }).then(function(docRef) {
       console.log("Document written: " + docRef.id);
-      
       if(photoUrl != null){
 
         uploadImageAsync(photoUrl).then(blob =>{
@@ -155,8 +154,8 @@ const RegisterAnimalScreen = ({navigation}) => {
               console.log('Uploaded a blob or file!');
 
               snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                dbUser.collection("animal").doc(docRef.id).update({
-                  photo: downloadURL,
+                dbAnimal.collection("animal").doc(docRef.id).update({
+                  "values.photo": downloadURL,
                 })
                 console.log('File available at', downloadURL);
               });

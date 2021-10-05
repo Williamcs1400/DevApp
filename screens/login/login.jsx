@@ -15,7 +15,8 @@ const Login = ({navigation}) => {
     if(email != null && password != null){
       firebase.auth().signInWithEmailAndPassword(email, password)
       .then(() => {
-        console.log('User account created & signed in!');
+        console.log('User signed in!');
+        navigation.navigate('Home')
       })
       .catch(error => {
         console.log('ERROR')
@@ -49,7 +50,7 @@ const Login = ({navigation}) => {
         onChange={(t) => onChangepassword(t)}
         value={password}
         label={I18n.t('password')}
-        secureTextEntry={true}
+        isSecure={true}
         placeholder={I18n.t('password')}
       />
       <TouchableOpacity 
