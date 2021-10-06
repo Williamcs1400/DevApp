@@ -16,32 +16,36 @@ const AnimalsList = ({route, navigation}) => {
   const getList = async () => {
     const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
 
-    db.collection('animal').where('values.creatorUser', '!=', email64).get().then((querySnapshot) => {
-      let aux = [];
-      let auxAll = [];
-      let count = 0;
-      querySnapshot.forEach((doc) => {
-        auxAll.push(doc.get('values'));
-        if(doc.get('values.photo') == null){
-          const animal = {
-            key: count++,
-            nome: doc.get('values.name'),
-            photo: 'https://firebasestorage.googleapis.com/v0/b/devapps-meau-9acf8.appspot.com/o/images%2Fanimals%2Fdefault%2Fdefault.jpg?alt=media&token=d3ffc04c-9048-45ea-9410-b12d00a381e5',
-            hash: doc.id,
-            creatorUser: doc.get('values.creatorUser'),
-          };
-          aux.push(animal);
-        }else{
-          const animal = {
-            key: count++,
-            nome: doc.get('values.name'),
-            photo: doc.get('values.photo'),
-            hash: doc.id,
-            creatorUser: doc.get('values.creatorUser'),
-          };
-          aux.push(animal);
-        }
-      });
+    db.collection('animal')
+      .where('values.creatorUser', '!=', email64)
+      .get()
+      .then((querySnapshot) => {
+        const aux = [];
+        const auxAll = [];
+        let count = 0;
+        querySnapshot.forEach((doc) => {
+          auxAll.push(doc.get('values'));
+          if (doc.get('values.photo') == null) {
+            const animal = {
+              key: count++,
+              nome: doc.get('values.name'),
+              photo:
+                'https://firebasestorage.googleapis.com/v0/b/devapps-meau-9acf8.appspot.com/o/images%2Fanimals%2Fdefault%2Fdefault.jpg?alt=media&token=d3ffc04c-9048-45ea-9410-b12d00a381e5',
+              hash: doc.id,
+              creatorUser: doc.get('values.creatorUser'),
+            };
+            aux.push(animal);
+          } else {
+            const animal = {
+              key: count++,
+              nome: doc.get('values.name'),
+              photo: doc.get('values.photo'),
+              hash: doc.id,
+              creatorUser: doc.get('values.creatorUser'),
+            };
+            aux.push(animal);
+          }
+        });
         setAnimals(aux);
         setAllFieldsAnimals(auxAll);
       })
@@ -50,17 +54,21 @@ const AnimalsList = ({route, navigation}) => {
       });
   };
 
-  async function getCurrentName(){
+  async function getCurrentName() {
     const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
 
-    await db.collection('users').doc(email64).get().then((querySnapshot) => {
-      let fullName = querySnapshot.get('fullName');
-      let photoURL = querySnapshot.get('photoURL');
-      setName(fullName);
-      setPhotoUser(photoURL);
-    }); 
+    await db
+      .collection('users')
+      .doc(email64)
+      .get()
+      .then((querySnapshot) => {
+        const fullName = querySnapshot.get('fullName');
+        const photoURL = querySnapshot.get('photoURL');
+        setName(fullName);
+        setPhotoUser(photoURL);
+      });
     setFlag(true);
-  } 
+  }
 
   const selectCard = (selectKey) => {
     console.log(`selectCard - selectKey: ${selectKey}`);
@@ -69,7 +77,7 @@ const AnimalsList = ({route, navigation}) => {
 
   useEffect(() => {
     getList();
-    if(!flag){
+    if (!flag) {
       getCurrentName();
     }
     console.log(animals);
@@ -78,13 +86,13 @@ const AnimalsList = ({route, navigation}) => {
   return (
     <View style={{flex: 1}}>
       <ScrollView contentContainerStyle={{padding: 8}}>
-        {allFieldsAnimals.map((animal) => (
+        {allFieldsAnimals.map((animal, index) => (
           <AnimalCard
             animal={animal}
             currentUserName={name}
             userPhoto={photoUser}
             key={animal.name + animal.photo}
-            onPressCard={() => selectCard(animal.key)}
+            onPressCard={() => selectCard(index)}
           />
         ))}
       </ScrollView>
