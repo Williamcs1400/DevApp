@@ -5,6 +5,7 @@ import I18n from 'i18n-js';
 import {View, TouchableOpacity} from 'react-native';
 import {Text} from '..';
 import firebase from 'firebase';
+import Toast from 'react-native-toast-message';
 
 const AnimalCard = (props) => {
   const {colors} = useTheme();
@@ -26,6 +27,11 @@ const AnimalCard = (props) => {
         notified: false,
       }).then(function(docRef) {
         console.log("Document written notification: " + docRef.id);
+        Toast.show({
+          type: 'success',
+          text1: 'Pedido feito com sucesso!',
+          text2: 'O pedido de adoção já foi criado, o dono logo te responderá'
+        });
       }).catch((error) => {
         console.error("Error adding document: ", error);
       });
@@ -84,19 +90,6 @@ const AnimalCard = (props) => {
             paddingTop: 4,
           }}
         >
-          {/* <Text color={colors.primaryBlack}>{animal.sex}</Text>
-          <Text color={colors.primaryBlack}>{animal.age}</Text>
-          <Text color={colors.primaryBlack}>{animal.size}</Text>
-        </View>
-        <View
-          style={{
-            display: 'flex',
-            justifyContent: 'center',
-            flexDirection: 'row',
-            marginBottom: -12,
-          }}
-        >
-          <Text color={colors.primaryBlack}>LOCATION - CITY</Text> */}
           <TouchableOpacity onPress={() => selectAdopt()}>
             <Text style={{fontSize: 25, color: 'gray'}}>Adotar</Text>
           </TouchableOpacity>

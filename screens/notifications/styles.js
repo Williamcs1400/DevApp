@@ -30,4 +30,10 @@ export default StyleSheet.create({
     fontSize: 16,
     color: '#434343'
   },
+  container: {
+    flex: 1,
+    alignItems: 'center',
+    justifyContent: 'center',
+    backgroundColor: '#fff',
+  },
 });

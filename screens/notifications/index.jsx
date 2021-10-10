@@ -4,28 +4,34 @@ import {Card, IconButton} from 'react-native-paper';
 import { Audio } from 'expo-av';
 import firebase from 'firebase';
 import styles from './styles'
+import AwesomeAlert from 'react-native-awesome-alerts';
 
 const Notifications = ({route, navigation}) => {
   const db = firebase.firestore();
   const [listNotifications, setListNotifications] = useState([]);
   const [sound, setSound] = React.useState();
+  const [showAlert, setshowAlert] = useState(false);
+  const [chosenKey, setChosenKey] = useState();
 
   const getNotifications = async () => {
     console.log('Searching for news notifications');
     const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
     let aux = [];
-
+    let key = 0;
     await db.collection('notifications').where('ownerUser', '==', email64).get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
 
           const noti = {
+            key: key,
+            id: doc.id,
             idAnimal: doc.get('idAnimal'),
             requesterUser: doc.get('requesterUser'),
             ownerUser: doc.get('ownerUser'),
             nameAnimal: doc.get('nameAnimal'),
             photoUser: doc.get('photoUser'),
           };
+          key++;
           aux.push(noti);
 
           if(doc.get('notified') == false){
@@ -57,6 +63,21 @@ const Notifications = ({route, navigation}) => {
     })
   }
 
+  function confirmNotification(){
+    setshowAlert(false);
+    console.log('key: ', chosenKey);
+    db.collection('notifications').doc(listNotifications[chosenKey].id).update({accepted: 'yes'});
+  }
+
+  function showAlertFun(key){
+    setChosenKey(key);
+    setshowAlert(true);
+  }
+  
+  function hideAlertFun(){
+    setshowAlert(false);
+  }
+
   useEffect(() => {
     getNotifications();
   }, []);
@@ -64,8 +85,8 @@ const Notifications = ({route, navigation}) => {
   return(
     <View>
     <ScrollView contentContainerStyle={styles.scroolStyle}>
-      {listNotifications.map(({ nameAnimal, requesterUser, photoUser}) => (
-        <Card style={styles.card}>
+      {listNotifications.map(({ key, nameAnimal, requesterUser, photoUser}) => (
+        <Card style={styles.card} onPress={() => showAlertFun(key)}>
           <View style={styles.mainView}>
             <Image source={{uri: photoUser}} style={styles.imageUser}></Image>
             <Text style={styles.textAdopt}>{requesterUser} está pedindo para adotar o {nameAnimal}</Text>
@@ -73,6 +94,23 @@ const Notifications = ({route, navigation}) => {
         </Card>
       ))}
     </ScrollView>
+    <View style={styles.container}>
+      <AwesomeAlert
+        show={showAlert}
+        showProgress={false}
+        title="Adoção"
+        message="Tem certeza que quer aceitar esta oferta de adoção?"
+        closeOnTouchOutside={true}
+        closeOnHardwareBackPress={false}
+        showCancelButton={true}
+        showConfirmButton={true}
+        cancelText="Recusar oferta"
+        confirmText="Aceitar oferta"
+        confirmButtonColor="#F4D03F"
+        onCancelPressed={() => hideAlertFun()}
+        onConfirmPressed={() => confirmNotification()}
+      />
+    </View>
   </View>
   );
 };
