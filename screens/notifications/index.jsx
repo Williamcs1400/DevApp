@@ -21,7 +21,6 @@ const Notifications = ({route, navigation}) => {
     await db.collection('notifications').where('ownerUser', '==', email64).get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-
           const noti = {
             key: key,
             id: doc.id,
@@ -63,10 +62,14 @@ const Notifications = ({route, navigation}) => {
     })
   }
 
-  function confirmNotification(){
+  async function confirmNotification(){
     setshowAlert(false);
     console.log('key: ', chosenKey);
-    db.collection('notifications').doc(listNotifications[chosenKey].id).update({accepted: 'yes'});
+    console.log('AAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAAA: ', listNotifications[chosenKey].idAnimal);
+    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
+    // await db.collection('notifications').doc(listNotifications[chosenKey].id).update({accepted: 'yes'});
+    await db.collection('animal').doc(listNotifications[chosenKey].idAnimal).update({"values.creatorUser": email64});
+
   }
 
   function showAlertFun(key){

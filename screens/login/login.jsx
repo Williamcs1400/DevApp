@@ -42,6 +42,7 @@ const Login = ({navigation}) => {
         onChange={(t) => onChangeEmail(t)}
         value={email}
         label="Email"
+        autoCapitalize='none'
         placeholder="Email"
         keyboardType={'email-address'}
       />
