@@ -9,16 +9,18 @@ import Toast from 'react-native-toast-message';
 
 const AnimalCard = (props) => {
   const {colors} = useTheme();
-  const {animal, onPressCard, currentUserName, userPhoto} = props;
+  const {animal, onPressCard, hash, currentUserName, userPhoto} = props;
   const db = firebase.firestore();
-  const {username, setUsername} = useState();
 
   async function selectAdopt() {
     console.log('selectAdopt: ', animal.name);
+    
     const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
 
     if(animal.creatorUser != email64){
       await db.collection('notifications').add({
+        idAnimal: hash,
+        requesterId: email64,
         requesterUser: currentUserName,
         photoUser: userPhoto,
         ownerUser: animal.creatorUser,

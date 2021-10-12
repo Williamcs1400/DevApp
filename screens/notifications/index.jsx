@@ -8,6 +8,7 @@ import AwesomeAlert from 'react-native-awesome-alerts';
 
 const Notifications = ({route, navigation}) => {
   const db = firebase.firestore();
+  const dbAnimal = firebase.firestore();
   const [listNotifications, setListNotifications] = useState([]);
   const [sound, setSound] = React.useState();
   const [showAlert, setshowAlert] = useState(false);
@@ -21,12 +22,12 @@ const Notifications = ({route, navigation}) => {
     await db.collection('notifications').where('ownerUser', '==', email64).get()
       .then((querySnapshot) => {
         querySnapshot.forEach((doc) => {
-
           const noti = {
             key: key,
             id: doc.id,
             idAnimal: doc.get('idAnimal'),
             requesterUser: doc.get('requesterUser'),
+            requesterId: doc.get('requesterId'),
             ownerUser: doc.get('ownerUser'),
             nameAnimal: doc.get('nameAnimal'),
             photoUser: doc.get('photoUser'),
@@ -63,10 +64,15 @@ const Notifications = ({route, navigation}) => {
     })
   }
 
-  function confirmNotification(){
+  async function confirmNotification(){
     setshowAlert(false);
-    console.log('key: ', chosenKey);
-    db.collection('notifications').doc(listNotifications[chosenKey].id).update({accepted: 'yes'});
+    // await dbAnimal.collection('notifications').doc(listNotifications[chosenKey].id).update({accepted: 'yes'});
+    await dbAnimal.collection('animal').doc(listNotifications[chosenKey].idAnimal).update({"values.creatorUser": listNotifications[chosenKey].requesterId})
+      .then(function(docRef) {
+        console.log("Document written: " + docRef.id);
+      }).catch((error) => {
+        console.error("Error adding document: ", error);
+    });
   }
 
   function showAlertFun(key){
