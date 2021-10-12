@@ -78,11 +78,12 @@ const AnimalsList = ({route, navigation}) => {
   return (
     <View style={{flex: 1}}>
       <ScrollView contentContainerStyle={{padding: 8}}>
-        {allFieldsAnimals.map((animal) => (
+        {allFieldsAnimals.map((animal, index) => (
           <AnimalCard
             animal={animal}
             currentUserName={name}
             userPhoto={photoUser}
+            hash={animals[index].hash}
             key={animal.name + animal.photo}
             onPressCard={() => selectCard(animal.key)}
           />
