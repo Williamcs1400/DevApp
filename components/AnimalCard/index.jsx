@@ -20,6 +20,7 @@ const AnimalCard = (props) => {
     if(animal.creatorUser != email64){
       await db.collection('notifications').add({
         idAnimal: hash,
+        requesterId: email64,
         requesterUser: currentUserName,
         photoUser: userPhoto,
         ownerUser: animal.creatorUser,

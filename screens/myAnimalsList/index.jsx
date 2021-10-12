@@ -1,15 +1,15 @@
 import React, { useState, useEffect } from 'react';
 import I18n from 'i18n-js';
-import {View, Text, ScrollView, Image } from 'react-native';
+import {RefreshControl, View, Text, ScrollView, Image } from 'react-native';
 import {Card, IconButton} from 'react-native-paper';
 import firebase from 'firebase';
 import styles from './styles';
 
 const MyAnimalsList = ({route, navigation}) => {
   const db = firebase.firestore();
-  //const {type} = route.params;
   const [animals, setAnimals] = useState([]);
   const [allFieldsAnimals, setAllFieldsAnimals] = useState([]);
+  const [refreshing, setRefreshing] = React.useState(false);
   I18n.locale = 'pt';
   let cont = 0;
 
@@ -52,6 +52,16 @@ const MyAnimalsList = ({route, navigation}) => {
     navigation.navigate('AnimalProfileScreen', {animal: allFieldsAnimals[selectKey]});
   }
 
+  const wait = (timeout) => {
+    return new Promise(resolve => setTimeout(resolve, timeout));
+  }
+
+  const onRefresh = React.useCallback(() => {
+    setRefreshing(true);
+    getList();
+    wait(2000).then(() => setRefreshing(false));
+  }, []);
+
   useEffect(() => {
     getList();
     console.log(animals);
@@ -59,7 +69,12 @@ const MyAnimalsList = ({route, navigation}) => {
 
   return(
     <View style={{ flex: 1 }}>
-    <ScrollView contentContainerStyle={{ paddingVertical: 20 }}>
+    <ScrollView contentContainerStyle={{ paddingVertical: 20 }} refreshControl={
+      <RefreshControl
+        refreshing={refreshing}
+        onRefresh={onRefresh}
+      />
+    }>
       {animals.map(({ nome, photo, key}) => (
         <Card style={styles.card}>
           <View style={styles.flex}>
