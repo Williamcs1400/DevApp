@@ -2,8 +2,8 @@ import React, {useState} from 'react';
 import {ScrollView, View} from 'react-native';
 import I18n from 'i18n-js';
 import {useTheme, Button, Card, Paragraph} from 'react-native-paper';
-import {TextInput, Text, ImagePicker} from '../../components';
 import firebase from 'firebase';
+import {TextInput, Text, ImagePicker} from '../../components';
 
 const styles = {
   inputGroupView: {
@@ -43,7 +43,7 @@ const Register = ({navigation}) => {
         <Text style={{color: colors.primaryTeal}}>{String(text).toUpperCase()}</Text>
       </View>
     );
-  }
+  };
 
   const InfoCard = ({text}) => {
     const {colors} = useTheme();
@@ -57,16 +57,15 @@ const Register = ({navigation}) => {
         </Card>
       </View>
     );
-  }
+  };
 
   async function uploadImageAsync(uri) {
-    
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.onload = function() {
+      xhr.onload = function () {
         resolve(xhr.response);
       };
-      xhr.onerror = function(e) {
+      xhr.onerror = function (e) {
         console.log(e);
         reject(new TypeError('Network request failed'));
       };
@@ -74,74 +73,78 @@ const Register = ({navigation}) => {
       xhr.open('GET', uri, true);
       xhr.send(null);
     });
-  
+
     return blob;
   }
 
-  async function loginEmailAndPassword(){
-    if(email != null && password != null){
-      firebase.auth().createUserWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('User account created & signed in!');
-        const email64 = new Buffer(email).toString('base64')
-        navigation.navigate('Home')
-        dbUser.collection("users").doc(email64).set({
-          email: email,
-          fullName: fullName,
-          age: age,
-          province: province,
-          city: city,
-          anddress: address,
-          phone: phone,
-          userName: username,
-          photoURL: ""
-        })
-        .then((docRef) => {
-          console.log("photo: " + photo)
+  async function loginEmailAndPassword() {
+    if (email != null && password != null) {
+      firebase
+        .auth()
+        .createUserWithEmailAndPassword(email, password)
+        .then(() => {
+          console.log('User account created & signed in!');
+          const email64 = new Buffer(email).toString('base64');
+          navigation.navigate('Home');
+          dbUser
+            .collection('users')
+            .doc(email64)
+            .set({
+              email,
+              fullName,
+              age,
+              province,
+              city,
+              anddress: address,
+              phone,
+              userName: username,
+              photoURL: '',
+            })
+            .then((docRef) => {
+              console.log(`photo: ${photo}`);
 
-          if(photo != null){
-            uploadImageAsync(photo).then(blob =>{
-
-              if(blob != null){
-                storage
-                .child('images')
-                .child('users')
-                .child(email64)
-                .child('profilePicture')
-                .put(blob).then(function(snapshot){
-                  console.log('Uploaded a blob or file!');
-  
-                  snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                    dbUser.collection("users").doc(email64).update({
-                      photoURL: downloadURL,
-                    })
-                    console.log('File available at', downloadURL);
-                  });
+              if (photo != null) {
+                uploadImageAsync(photo).then((blob) => {
+                  if (blob != null) {
+                    storage
+                      .child('images')
+                      .child('users')
+                      .child(email64)
+                      .child('profilePicture')
+                      .put(blob)
+                      .then((snapshot) => {
+                        console.log('Uploaded a blob or file!');
+                        snapshot.ref.getDownloadURL().then((downloadURL) => {
+                          dbUser.collection('users').doc(email64).update({
+                            photoURL: downloadURL,
+                          });
+                          console.log('File available at', downloadURL);
+                        });
+                      });
+                  }
                 });
               }
+            })
+            .catch((error) => {
+              console.error('Error adding document: ', error);
             });
-          }
         })
         .catch((error) => {
-            console.error("Error adding document: ", error);
+          console.log('ERROR');
+          if (error.code === 'auth/email-already-in-use') {
+            console.log('That email address is already in use!');
+          }
+
+          if (error.code === 'auth/invalid-email') {
+            console.log('That email address is invalid!');
+          }
+          console.error(error);
         });
-        })
-      .catch(error => {
-        console.log('ERROR')
-      if (error.code === 'auth/email-already-in-use') {
-        console.log('That email address is already in use!');
-      }
-  
-      if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!');
-      }
-        console.error(error);
-      });
-    }else{
-      console.log('Email ou senha vazios')
+    } else {
+      console.log('Email ou senha vazios');
     }
   }
-  
+
   return (
     <ScrollView style={{marginBottom: 50}}>
       <View>
@@ -154,11 +157,7 @@ const Register = ({navigation}) => {
         onChange={(t) => setFullName(t)}
         placeholder={I18n.t('fullName')}
       />
-      <TextInput
-        value={age}
-        onChange={(t) => setAge(t)}
-        placeholder={I18n.t('age')}
-      />
+      <TextInput value={age} onChange={(t) => setAge(t)} placeholder={I18n.t('age')} />
       <TextInput
         value={email}
         onChange={(t) => setEmail(t)}
@@ -169,11 +168,7 @@ const Register = ({navigation}) => {
         onChange={(t) => setProvince(t)}
         placeholder={I18n.t('province')}
       />
-      <TextInput
-        value={city}
-        onChange={(t) => setCity(t)}
-        placeholder={I18n.t('city')}
-      />
+      <TextInput value={city} onChange={(t) => setCity(t)} placeholder={I18n.t('city')} />
       <TextInput
         value={address}
         onChange={(t) => setAddress(t)}
@@ -195,19 +190,16 @@ const Register = ({navigation}) => {
         value={password}
         onChange={(t) => setPassword(t)}
         placeholder={I18n.t('password')}
-        isSecure={true}
+        isSecure
       />
       <TextInput
         value={passwordConfirm}
         onChange={(t) => setPasswordConfirm(t)}
         placeholder={I18n.t('passwordConfirm')}
-        isSecure={true}
+        isSecure
       />
 
-      <ImagePicker 
-        label="profile picture" 
-        imageCallback={(photo) => setPhoto(photo)}
-        />
+      <ImagePicker label="profile picture" imageCallback={(photo) => setPhoto(photo)} />
 
       <Button
         mode="contained"

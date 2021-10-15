@@ -2,45 +2,49 @@ import React, {useState} from 'react';
 import {View, Button} from 'react-native';
 import I18n from 'i18n-js';
 import {useTheme} from 'react-native-paper';
+import firebase from 'firebase';
 import styles from './styles';
 import {PreferencesContext} from '../../preferencesContext';
-import firebase from 'firebase';
-import firebaseConfig from '../../configFirebase'
+import firebaseConfig from '../../configFirebase';
 
 const HomeScreen = ({navigation}) => {
   const [lang, setLang] = useState(I18n.locale);
   const {colors, fonts} = useTheme();
   const {toggleTheme, isThemeDark} = React.useContext(PreferencesContext);
-  let [userIsLogged, setUserIsLogged] = useState('Carregando');
+  const [userIsLogged, setUserIsLogged] = useState('Carregando');
 
   const switchLang = () => {
     setLang(lang === 'pt' ? 'en' : 'pt');
     I18n.locale = lang;
   };
 
-  if(firebase.apps.length === 0){
-    firebase.initializeApp(firebaseConfig)
+  if (firebase.apps.length === 0) {
+    firebase.initializeApp(firebaseConfig);
   }
 
-  firebase.auth().onAuthStateChanged(user =>{
-    if(user != null){
-      setUserIsLogged('Usuário está logado')
+  firebase.auth().onAuthStateChanged((user) => {
+    if (user != null) {
+      setUserIsLogged('Usuário está logado');
       console.log('User is logged');
     }
-    if(user == null){
-      setUserIsLogged('Usuário não está logado')
+    if (user == null) {
+      setUserIsLogged('Usuário não está logado');
       console.log('User is not logged');
       navigation.navigate('ChangeEntry');
     }
   });
 
-  function signout(){
-    firebase.auth().signOut().then(() => {
-      console.log('exit');
-      this.forceUpdate();
-    }).catch((error) => {
-      console.log('error: ' + error);
-    });
+  function signout() {
+    firebase
+      .auth()
+      .signOut()
+      .then(() => {
+        console.log('exit');
+        // this.forceUpdate(); wtf?
+      })
+      .catch((error) => {
+        console.log(`error: ${error}`);
+      });
   }
 
   return (
