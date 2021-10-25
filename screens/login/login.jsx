@@ -1,40 +1,49 @@
 import React, {useState, setState} from 'react';
-import {View, Text, Button, SafeAreaView, StyleSheet, TouchableOpacity} from 'react-native';
+import {
+  View,
+  Text,
+  Button,
+  SafeAreaView,
+  StyleSheet,
+  TouchableOpacity,
+} from 'react-native';
 import I18n from 'i18n-js';
-import styles from './styles';
 import firebase from 'firebase';
+import styles from './styles';
 import {TextInput} from '../../components';
-global.Buffer = global.Buffer || require('buffer').Buffer
+
+global.Buffer = global.Buffer || require('buffer').Buffer;
 
 const Login = ({navigation}) => {
   const [email, onChangeEmail] = React.useState(null);
   const [password, onChangepassword] = React.useState(null);
   const dbUser = firebase.firestore();
 
-  function loginEmailAndPassword(){
-    if(email != null && password != null){
-      firebase.auth().signInWithEmailAndPassword(email, password)
-      .then(() => {
-        console.log('User signed in!');
-        navigation.navigate('Home')
-      })
-      .catch(error => {
-        console.log('ERROR')
-      if (error.code === 'auth/email-already-in-use') {
-        console.log('That email address is already in use!');
-      }
-  
-      if (error.code === 'auth/invalid-email') {
-        console.log('That email address is invalid!');
-      }
-        console.error(error);
-      });
+  function loginEmailAndPassword() {
+    if (email != null && password != null) {
+      firebase
+        .auth()
+        .signInWithEmailAndPassword(email, password)
+        .then(() => {
+          console.log('User signed in!');
+          navigation.navigate('Home');
+        })
+        .catch((error) => {
+          console.log('ERROR');
+          if (error.code === 'auth/email-already-in-use') {
+            console.log('That email address is already in use!');
+          }
 
-    }else{
-      console.log('Email ou senha vazios')
+          if (error.code === 'auth/invalid-email') {
+            console.log('That email address is invalid!');
+          }
+          console.error(error);
+        });
+    } else {
+      console.log('Email ou senha vazios');
     }
   }
-  
+
   return (
     <SafeAreaView style={styles.home}>
       <TextInput
@@ -42,22 +51,22 @@ const Login = ({navigation}) => {
         onChange={(t) => onChangeEmail(t)}
         value={email}
         label="Email"
-        autoCapitalize='none'
+        autoCapitalize="none"
         placeholder="Email"
-        keyboardType={'email-address'}
+        keyboardType="email-address"
       />
       <TextInput
         style={styles.input}
         onChange={(t) => onChangepassword(t)}
         value={password}
         label={I18n.t('password')}
-        isSecure={true}
+        isSecure
         placeholder={I18n.t('password')}
       />
-      <TouchableOpacity 
+      <TouchableOpacity
         style={styles.confirmButton}
         onPress={() => loginEmailAndPassword()}
-        >
+      >
         <Text>{I18n.t('confirm')}</Text>
       </TouchableOpacity>
     </SafeAreaView>

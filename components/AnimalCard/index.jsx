@@ -3,9 +3,9 @@ import PropTypes from 'prop-types';
 import {Card, useTheme, IconButton, Button} from 'react-native-paper';
 import I18n from 'i18n-js';
 import {View, TouchableOpacity} from 'react-native';
-import {Text} from '..';
 import firebase from 'firebase';
 import Toast from 'react-native-toast-message';
+import {Text} from '..';
 
 const AnimalCard = (props) => {
   const {colors} = useTheme();
@@ -14,29 +14,33 @@ const AnimalCard = (props) => {
 
   async function selectAdopt() {
     console.log('selectAdopt: ', animal.name);
-    
+
     const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
 
-    if(animal.creatorUser != email64){
-      await db.collection('notifications').add({
-        idAnimal: hash,
-        requesterId: email64,
-        requesterUser: currentUserName,
-        photoUser: userPhoto,
-        ownerUser: animal.creatorUser,
-        nameAnimal: animal.name,
-        photoAnimal: animal.photo,
-        notified: false,
-      }).then(function(docRef) {
-        console.log("Document written notification: " + docRef.id);
-        Toast.show({
-          type: 'success',
-          text1: 'Pedido feito com sucesso!',
-          text2: 'O pedido de adoção já foi criado, o dono logo te responderá'
+    if (animal.creatorUser != email64) {
+      await db
+        .collection('notifications')
+        .add({
+          idAnimal: hash,
+          requesterId: email64,
+          requesterUser: currentUserName,
+          photoUser: userPhoto,
+          ownerUser: animal.creatorUser,
+          nameAnimal: animal.name,
+          photoAnimal: animal.photo,
+          notified: false,
+        })
+        .then((docRef) => {
+          console.log(`Document written notification: ${docRef.id}`);
+          Toast.show({
+            type: 'success',
+            text1: 'Pedido feito com sucesso!',
+            text2: 'O pedido de adoção já foi criado, o dono logo te responderá',
+          });
+        })
+        .catch((error) => {
+          console.error('Error adding document: ', error);
         });
-      }).catch((error) => {
-        console.error("Error adding document: ", error);
-      });
     }
   }
 
@@ -55,7 +59,6 @@ const AnimalCard = (props) => {
         shadowOpacity: 0.27,
         shadowRadius: 4.65,
       }}
-      
     >
       <Card.Title
         style={{backgroundColor: colors.terciaryOrange, minHeight: 30}}
@@ -81,7 +84,7 @@ const AnimalCard = (props) => {
             animal.photo ||
             'https://firebasestorage.googleapis.com/v0/b/devapps-meau-9acf8.appspot.com/o/images%2Fanimals%2Fdefault%2Fdefault.jpg?alt=media&token=d3ffc04c-9048-45ea-9410-b12d00a381e5',
         }}
-        style={{height:350}}
+        style={{height: 350}}
       />
       <Card.Content>
         <View
@@ -93,7 +96,9 @@ const AnimalCard = (props) => {
           }}
         >
           <TouchableOpacity onPress={() => selectAdopt()}>
-            <Text style={{fontSize: 25, color: 'gray'}}>Adotar</Text>
+            <Text fontSize={25} color="gray">
+              Adotar
+            </Text>
           </TouchableOpacity>
         </View>
       </Card.Content>

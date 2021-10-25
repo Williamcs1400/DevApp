@@ -1,8 +1,9 @@
 /* eslint-disable camelcase */
 import React from 'react';
+import {LogBox} from 'react-native';
 import {NavigationContainer} from '@react-navigation/native';
 import {createDrawerNavigator} from '@react-navigation/drawer';
-import {Provider as PaperProvider, useTheme} from 'react-native-paper';
+import {Provider as PaperProvider} from 'react-native-paper';
 import I18n from 'i18n-js';
 import {
   useFonts,
@@ -25,7 +26,9 @@ import {
   AnimalProfileScreen,
   AnimalsList,
   MyAnimalsList,
-  Notifications
+  Notifications,
+  ChatList,
+  Chat,
 } from './screens';
 import {PreferencesContext} from './preferencesContext';
 import {CustomDrawer} from './components';
@@ -54,6 +57,7 @@ function App() {
     () => setIsThemeDark(!isThemeDark),
     [isThemeDark],
   );
+  LogBox.ignoreLogs(['Setting a timer']);
 
   const preferences = React.useMemo(
     () => ({
@@ -117,6 +121,16 @@ function App() {
               name="Notifications"
               options={{title: 'Notificações'}}
               component={Notifications}
+            />
+            <Drawer.Screen
+              name="ChatList"
+              options={{title: 'Chat'}}
+              component={ChatList}
+            />
+            <Drawer.Screen
+              name="Chat"
+              options={{title: 'Chat', hidden: true}}
+              component={Chat}
             />
           </Drawer.Navigator>
         </NavigationContainer>

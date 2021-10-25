@@ -5,31 +5,34 @@ import {TextInput as TextInputPaper, useTheme} from 'react-native-paper';
 import {useController} from 'react-hook-form';
 import Label from '../Label';
 
-const TextInput = ({label, placeholder, isSecure = false, onChange}) => {
-  const {colors} = useTheme();
+const TextInput = React.forwardRef(
+  ({label, placeholder, isSecure = false, onChange}, ref) => {
+    const {colors} = useTheme();
 
-  return (
-    <View style={{padding: 16}}>
-      {label.length > 0 && <Label name={label} />}
+    return (
+      <View style={{padding: 16}}>
+        {label.length > 0 && <Label name={label} />}
 
-      <TextInputPaper
-        placeholder={placeholder}
-        underlineColor={colors.primaryTeal}
-        selectionColor={colors.primaryTeal}
-        outlineColor={colors.primaryTeal}
-        dense
-        theme={{
-          colors: {
-            primary: colors.primaryTeal,
-          },
-          roundness: 0,
-        }}
-        secureTextEntry={isSecure}
-        onChangeText={onChange}
-      />
-    </View>
-  );
-};
+        <TextInputPaper
+          placeholder={placeholder}
+          underlineColor={colors.primaryTeal}
+          selectionColor={colors.primaryTeal}
+          outlineColor={colors.primaryTeal}
+          dense
+          ref={ref}
+          theme={{
+            colors: {
+              primary: colors.primaryTeal,
+            },
+            roundness: 0,
+          }}
+          secureTextEntry={isSecure}
+          onChangeText={onChange}
+        />
+      </View>
+    );
+  },
+);
 
 export default TextInput;
 
