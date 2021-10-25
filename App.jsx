@@ -29,6 +29,7 @@ import {
   Notifications,
   ChatList,
   Chat,
+  Infos
 } from './screens';
 import {PreferencesContext} from './preferencesContext';
 import {CustomDrawer} from './components';
@@ -131,6 +132,11 @@ function App() {
               name="Chat"
               options={{title: 'Chat', hidden: true}}
               component={Chat}
+            />
+            <Drawer.Screen
+              name="Info"
+              options={{title: 'Quem somos?'}}
+              component={Infos}
             />
           </Drawer.Navigator>
         </NavigationContainer>
