@@ -1,5 +1,5 @@
-import React, {useState} from 'react';
-import {View, Button} from 'react-native';
+import React, {useState, useEffect} from 'react';
+import {View, Button, Text, Pressable} from 'react-native';
 import I18n from 'i18n-js';
 import {useTheme} from 'react-native-paper';
 import firebase from 'firebase';
@@ -12,6 +12,8 @@ const HomeScreen = ({navigation}) => {
   const {colors, fonts} = useTheme();
   const {toggleTheme, isThemeDark} = React.useContext(PreferencesContext);
   const [userIsLogged, setUserIsLogged] = useState('Carregando');
+  let [name, setName] = useState('Carregando');
+  const db = firebase.firestore();
 
   const switchLang = () => {
     setLang(lang === 'pt' ? 'en' : 'pt');
@@ -46,51 +48,26 @@ const HomeScreen = ({navigation}) => {
         console.log(`error: ${error}`);
       });
   }
+  
+  async function getUserName(){
+    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
+    await db.collection('users').doc(email64).get().then((querySnapshot) => {
+      let names = querySnapshot.get('fullName').split(' ');
+      setName(names[0])
+    });
+  }
+
+  console.log('')
+  useEffect(() => {
+    getUserName();
+  }, []);
 
   return (
     <View style={{...styles.home, backgroundColor: colors.background}}>
-      {/* <Text style={{color: colors.primary}}>{I18n.t('home')}</Text>
-
-      <TouchableRipple>
-        <Switch onValueChange={toggleTheme} color="red" value={isThemeDark} />
-      </TouchableRipple>
-
-      <Text style={{...fonts.thin, color: colors.text}}>thin</Text>
-      <Text style={{...fonts.light, color: colors.text}}>light</Text>
-      <Text style={{...fonts.regular, color: colors.text}}>regular</Text>
-      <Text style={{...fonts.medium, color: colors.text}}>medium</Text>
-      <Text style={{...fonts.bold, color: colors.text}}>bold</Text>
-
-      <Button color={colors.primaryOrange} title="primaryOrange" />
-      <Button color={colors.secondaryOrange} title="secondaryOrange" />
-      <Button color={colors.terciaryOrange} title="terciaryOrange" />
-      <Button color={colors.primaryTeal} title="primaryTeal" />
-      <Button color={colors.secondaryTeal} title="secondaryTeal" />
-      <Button color={colors.terciaryTeal} title="terciaryTeal" /> */}
-
-      {/* <Button
-        title={I18n.t('goToDetails')}
-        onPress={() => navigation.navigate('Details')}
-      /> */}
-      {/* <Button title={lang} onPress={switchLang} />
-      {/* <Button title={'Lista de animais'} onPress={() => navigation.navigate('AnimalsList', {type: 'all'})} /> */}
-      {/* <Button
-        color={colors.primaryOrange}
-        title="Meus animais"
-        onPress={() => navigation.navigate('AnimalsList', {type: 'my'})} */}
-      {/* /> */}
-      <Button title={I18n.t('signOut')} onPress={signout} />
-      <Button
-        color={colors.primaryOrange}
-        title="Cadastro de animais"
-        onPress={() => navigation.navigate('RegisterAnimalScreen')}
-      />
-      {/* <Button
-        color={colors.primaryOrange}
-        title="cadastro de bichos"
-        onPress={() => navigation.navigate('AnimalsList')}
-      /> */}
-      {/* <Button color={colors.primaryTeal} title={lang} onPress={switchLang} /> */}
+      <Text style={styles.textName}>Olá, {name}</Text>
+      <Pressable style={styles.button} onPress={signout}>
+        <Text style={styles.text}>Sair</Text>
+      </Pressable>
     </View>
   );
 };
