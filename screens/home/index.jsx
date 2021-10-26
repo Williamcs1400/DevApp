@@ -57,7 +57,8 @@ const HomeScreen = ({navigation}) => {
     });
   }
 
-  console.log('')
+  console.log('name: ' + name);
+
   useEffect(() => {
     getUserName();
   }, []);

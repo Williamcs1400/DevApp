@@ -14,3 +14,4 @@ export {default as MyAnimalsList} from './myAnimalsList';
 export {default as Notifications} from './notifications';
 export {default as ChatList} from './chatList';
 export {default as Chat} from './chat';
+export {default as Infos} from './infos/index';
