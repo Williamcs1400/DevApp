@@ -2,8 +2,8 @@ import React, {useState, useEffect} from 'react';
 import {ScrollView, View, Alert} from 'react-native';
 import {useForm} from 'react-hook-form';
 import {Checkbox, RadioButton, useTheme, Button} from 'react-native-paper';
-import {TextInput, Text, ImagePicker, Label} from '../../components';
 import firebase from 'firebase';
+import {TextInput, Text, ImagePicker, Label} from '../../components';
 
 const styles = {
   inputGroupView: {
@@ -113,13 +113,12 @@ const RegisterAnimalScreen = ({navigation}) => {
   }, [register]);
 
   async function uploadImageAsync(uri) {
-    
     const blob = await new Promise((resolve, reject) => {
       const xhr = new XMLHttpRequest();
-      xhr.onload = function() {
+      xhr.onload = function () {
         resolve(xhr.response);
       };
-      xhr.onerror = function(e) {
+      xhr.onerror = function (e) {
         console.log(e);
         reject(new TypeError('Network request failed'));
       };
@@ -127,45 +126,47 @@ const RegisterAnimalScreen = ({navigation}) => {
       xhr.open('GET', uri, true);
       xhr.send(null);
     });
-  
+
     return blob;
   }
 
-  async function saveFirebase(){
-
-    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64')
+  async function saveFirebase() {
+    const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
     setValue('creatorUser', email64);
     const values = getValues();
-    dbAnimal.collection("animal").add({
-      values
-    }).then(function(docRef) {
-      console.log("Document written: " + docRef.id);
-      if(photoUrl != null){
+    dbAnimal
+      .collection('animal')
+      .add({
+        values,
+      })
+      .then((docRef) => {
+        console.log(`Document written: ${docRef.id}`);
+        if (photoUrl != null) {
+          uploadImageAsync(photoUrl).then((blob) => {
+            if (blob != null) {
+              storage
+                .child('images')
+                .child('animals')
+                .child(docRef.id)
+                .child('animalPicture')
+                .put(blob)
+                .then((snapshot) => {
+                  console.log('Uploaded a blob or file!');
 
-        uploadImageAsync(photoUrl).then(blob =>{
-
-          if(blob != null){
-            storage
-            .child('images')
-            .child('animals')
-            .child(docRef.id)
-            .child('animalPicture')
-            .put(blob).then(function(snapshot){
-              console.log('Uploaded a blob or file!');
-
-              snapshot.ref.getDownloadURL().then(function(downloadURL) {
-                dbAnimal.collection("animal").doc(docRef.id).update({
-                  "values.photo": downloadURL,
-                })
-                console.log('File available at', downloadURL);
-              });
-            });
-          }
-        });
-      }
-    }).catch((error) => {
-        console.error("Error adding document: ", error);
-    });
+                  snapshot.ref.getDownloadURL().then((downloadURL) => {
+                    dbAnimal.collection('animal').doc(docRef.id).update({
+                      'values.photo': downloadURL,
+                    });
+                    console.log('File available at', downloadURL);
+                  });
+                });
+            }
+          });
+        }
+      })
+      .catch((error) => {
+        console.error('Error adding document: ', error);
+      });
     navigation.navigate('Home');
   }
 
@@ -344,7 +345,7 @@ const RegisterAnimalScreen = ({navigation}) => {
         <Button
           mode="contained"
           theme={{roundness: 0}}
-          style={{width: '60%', alignSelf: 'center'}}
+          style={{width: '60%', alignSelf: 'center', color: 'white', marginBottom: 16}}
           onPress={() => saveFirebase()}
         >
           PROCURAR AJUDA

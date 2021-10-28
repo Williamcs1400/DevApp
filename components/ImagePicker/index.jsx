@@ -6,9 +6,9 @@ import {Card, useTheme} from 'react-native-paper';
 import {Ionicons} from '@expo/vector-icons';
 import * as ExpoImagePicker from 'expo-image-picker';
 import I18n from 'i18n-js';
+import AwesomeAlert from 'react-native-awesome-alerts';
 import Text from '../Text';
 import Label from '../Label';
-import AwesomeAlert from 'react-native-awesome-alerts';
 
 const ImagePicker = ({label, imageCallback}) => {
   const {colors} = useTheme();
@@ -62,17 +62,17 @@ const ImagePicker = ({label, imageCallback}) => {
     }
   };
 
-  function interImage(){
+  function interImage() {
     setshowAlert(false);
     pickImage();
   }
-  
-  function interCamera(){
+
+  function interCamera() {
     setshowAlert(false);
     pickCamera();
   }
 
-  function showAlertFun(){
+  function showAlertFun() {
     setshowAlert(true);
   }
 
@@ -103,26 +103,33 @@ const ImagePicker = ({label, imageCallback}) => {
           )}
         </Card.Content>
       </Card>
-      <View style={{flex: 1, lignItems: 'center', justifyContent: 'center', backgroundColor: '#fff'}}>
+      <View
+        style={{
+          flex: 1,
+          lignItems: 'center',
+          justifyContent: 'center',
+          backgroundColor: '#fff',
+        }}
+      >
         <AwesomeAlert
           show={showAlert}
           showProgress={false}
           title="Imagem de perfil"
           message="Escolha de onde vai querer selecionar a foto"
-          closeOnTouchOutside={true}
+          closeOnTouchOutside
           closeOnHardwareBackPress={false}
-          showCancelButton={true}
-          showConfirmButton={true}
+          showCancelButton
+          showConfirmButton
           cancelText="Câmera"
           confirmText="Galeria"
           confirmButtonColor="#F4D03F"
           cancelButtonColor="#F4D03F"
           onCancelPressed={() => interCamera()}
           onConfirmPressed={() => interImage()}
+          onDismiss={() => setshowAlert(false)}
         />
       </View>
     </View>
-    
   );
 };
 

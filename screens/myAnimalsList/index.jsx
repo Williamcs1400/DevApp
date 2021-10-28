@@ -75,6 +75,7 @@ const MyAnimalsList = ({route, navigation}) => {
         contentContainerStyle={{paddingVertical: 20}}
         refreshControl={<RefreshControl refreshing={refreshing} onRefresh={onRefresh} />}
       >
+        {animals.length === 0 && <Text>Você ainda não tem animais cadastrados.</Text>}
         {animals.map(({nome, photo, key}) => (
           <Card style={styles.card}>
             <View style={styles.flex}>
