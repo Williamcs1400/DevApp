@@ -22,8 +22,8 @@ const ImagePicker = ({label, imageCallback}) => {
         if (status !== 'granted') {
           alert('Sorry, we need camera roll permissions to make this work!');
         }
-        status = await ExpoImagePicker.requestCameraPermissionsAsync();
-        if (status !== 'granted') {
+        const {camerastatus} = await ExpoImagePicker.requestCameraPermissionsAsync();
+        if (camerastatus !== 'granted') {
           alert('Sorry, we need camera permissions to make this work!');
         }
       }
