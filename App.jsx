@@ -14,6 +14,7 @@ import {
   Roboto_700Bold,
   Roboto_900Black,
 } from '@expo-google-fonts/roboto';
+import Toast from 'react-native-toast-message';
 import meauTheme from './meauTheme';
 import {en, pt} from './translations';
 import {
@@ -29,7 +30,7 @@ import {
   Notifications,
   ChatList,
   Chat,
-  Infos
+  Infos,
 } from './screens';
 import {PreferencesContext} from './preferencesContext';
 import {CustomDrawer} from './components';
@@ -139,6 +140,7 @@ function App() {
               component={Infos}
             />
           </Drawer.Navigator>
+          <Toast ref={(ref) => Toast.setRef(ref)} />
         </NavigationContainer>
       </PaperProvider>
     </PreferencesContext.Provider>
