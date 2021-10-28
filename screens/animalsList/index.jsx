@@ -80,7 +80,7 @@ const AnimalsList = ({route, navigation}) => {
     if (!flag) {
       getCurrentName();
     }
-    console.log(animals);
+    animals.map((a) => console.log(a));
   }, []);
 
   return (

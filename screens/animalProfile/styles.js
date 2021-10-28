@@ -1,8 +1,8 @@
 import {StyleSheet} from 'react-native';
 
 export default StyleSheet.create({
-  viewInternal:{
-    padding: 20
+  viewInternal: {
+    padding: 20,
   },
   textFielf: {
     color: '#589b9b',
@@ -11,17 +11,17 @@ export default StyleSheet.create({
   textName: {
     color: '#434343',
     fontSize: 25,
-    fontWeight: "bold",
+    fontWeight: 'bold',
     paddingBottom: 8,
   },
   textValue: {
     color: '#434343',
     fontSize: 15,
-  }, 
+  },
   listHorizontal: {
     flex: 1,
     flexDirection: 'row',
     alignContent: 'stretch',
-    justifyContent: 'space-between'
-  }
+    justifyContent: 'space-between',
+  },
 });
