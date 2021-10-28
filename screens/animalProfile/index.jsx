@@ -59,7 +59,6 @@ const AnimalProfile = (props) => {
           <Text>{animal.needs.objects}</Text>
 
           <Text>{animal.history}</Text>
-          <Text>dono: {animal.creatorUser}</Text>
           <Button
             onPress={() => {
               props.navigation.navigate('Chat', {user: animal.creatorUser});
