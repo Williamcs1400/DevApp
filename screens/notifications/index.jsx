@@ -48,7 +48,6 @@ const Notifications = ({route, navigation}) => {
         console.error(`Error: ${e}`);
       });
     setListNotifications(aux);
-    setTimeout(getNotifications, 10000);
   };
 
   console.log('listNotifications: ', listNotifications);
@@ -93,11 +92,17 @@ const Notifications = ({route, navigation}) => {
 
   useEffect(() => {
     getNotifications();
+    const willFocusSubscription = navigation.addListener('focus', () => {
+      getNotifications();
+    });
+
+    return willFocusSubscription;
   }, []);
 
   return (
     <View>
       <ScrollView contentContainerStyle={styles.scroolStyle}>
+        {listNotifications.length === 0 && <Text>Você não possui notificações.</Text>}
         {listNotifications.map(({key, nameAnimal, requesterUser, photoUser}) => (
           <Card style={styles.card} onPress={() => showAlertFun(key)}>
             <View style={styles.mainView}>
