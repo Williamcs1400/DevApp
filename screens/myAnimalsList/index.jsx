@@ -67,6 +67,11 @@ const MyAnimalsList = ({route, navigation}) => {
   useEffect(() => {
     getList();
     console.log(animals);
+    const willFocusSubscription = navigation.addListener('focus', () => {
+      getList();
+    });
+
+    return willFocusSubscription;
   }, []);
 
   return (

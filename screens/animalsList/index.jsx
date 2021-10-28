@@ -81,6 +81,13 @@ const AnimalsList = ({route, navigation}) => {
       getCurrentName();
     }
     animals.map((a) => console.log(a));
+    const willFocusSubscription = navigation.addListener('focus', () => {
+      setAnimals([]);
+      setAllFieldsAnimals([]);
+      getList();
+    });
+
+    return willFocusSubscription;
   }, []);
 
   return (

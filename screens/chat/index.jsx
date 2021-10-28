@@ -135,6 +135,7 @@ const Chat = ({route, navigation}) => {
     setMessages([]);
     fetchSelfUser();
     const willFocusSubscription = navigation.addListener('focus', () => {
+      setMessages([]);
       fetchSelfUser();
     });
 
