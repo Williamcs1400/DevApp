@@ -74,8 +74,6 @@ const ChatList = ({route, navigation}) => {
         .doc(chat.id.replace(/\s/g, ''))
         .get('last');
 
-      console.log(user.data());
-
       const chatObj = {
         id: chat.id,
         user: {

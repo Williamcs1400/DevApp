@@ -84,7 +84,7 @@ const Chat = ({route, navigation}) => {
     // console.log(existingChat);
 
     if (existingChat) {
-      console.log('existe chat');
+      // console.log('existe chat');
       // pegar chat já existente com o usuario
       const chat = await firebase
         .firestore()
@@ -98,7 +98,7 @@ const Chat = ({route, navigation}) => {
   };
 
   const createNewChat = async () => {
-    console.log('criando novo chat');
+    // console.log('criando novo chat');
     const newChat = {
       last: {
         author: '',
@@ -130,8 +130,8 @@ const Chat = ({route, navigation}) => {
   };
 
   useEffect(() => {
-    console.log('entrando chat');
-    console.log(route.params);
+    // console.log('entrando chat');
+    // console.log(route.params);
     setMessages([]);
     fetchSelfUser();
     const willFocusSubscription = navigation.addListener('focus', () => {
@@ -152,8 +152,8 @@ const Chat = ({route, navigation}) => {
   }, [selfUser]);
 
   useEffect(() => {
-    console.log('atualizou chatId');
-    console.log(chatId);
+    // console.log('atualizou chatId');
+    // console.log(chatId);
     if (message) {
       sendMessage();
     }
@@ -178,7 +178,7 @@ const Chat = ({route, navigation}) => {
       return;
     }
     if (message && chatId) {
-      console.log('sending message');
+      // console.log('sending message');
       // messages.push({author: 'eu', message});
       const messageObj = {
         author: email64,
