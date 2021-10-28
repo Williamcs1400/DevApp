@@ -12,7 +12,7 @@ const HomeScreen = ({navigation}) => {
   const {colors, fonts} = useTheme();
   const {toggleTheme, isThemeDark} = React.useContext(PreferencesContext);
   const [userIsLogged, setUserIsLogged] = useState('Carregando');
-  let [name, setName] = useState('Carregando');
+  const [name, setName] = useState('Carregando');
   const db = firebase.firestore();
 
   const switchLang = () => {
@@ -48,24 +48,35 @@ const HomeScreen = ({navigation}) => {
         console.log(`error: ${error}`);
       });
   }
-  
-  async function getUserName(){
+
+  async function getUserName() {
     const email64 = new Buffer(firebase.auth().currentUser.email).toString('base64');
-    await db.collection('users').doc(email64).get().then((querySnapshot) => {
-      let names = querySnapshot.get('fullName').split(' ');
-      setName(names[0])
-    });
+    await db
+      .collection('users')
+      .doc(email64)
+      .get()
+      .then((querySnapshot) => {
+        const names = querySnapshot.get('fullName').split(' ');
+        setName(names[0]);
+      });
   }
 
-  console.log('name: ' + name);
+  console.log(`name: ${name}`);
   getUserName();
-  
+
   useEffect(() => {
     getUserName();
   }, []);
 
   return (
-    <View style={{...styles.home, backgroundColor: colors.background}}>
+    <View
+      style={{
+        ...styles.home,
+        backgroundColor: colors.background,
+        display: 'flex',
+        justifyContent: 'space-evenly',
+      }}
+    >
       <Text style={styles.textName}>Olá, {name}</Text>
       <Pressable style={styles.button} onPress={signout}>
         <Text style={styles.text}>Sair</Text>
